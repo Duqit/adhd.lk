@@ -1,7 +1,6 @@
 # ADHD.lk
 
 **Free, practical tools for ADHD brains, and plain-language guides to ADHD.**
-No ads. No paywall. No account needed.
 
 🌐 **Live site:** [adhd.lk](https://adhd.lk)
 
