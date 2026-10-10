@@ -1,0 +1,14 @@
+# Server-side partials only — never served directly over the web.
+# This host ignores <Require>/<Files>, so the rewrite is what actually blocks.
+# Note: a subdirectory .htaccess stops the parent's mod_rewrite rules from
+# applying here, so the rule must live in this file.
+RewriteEngine On
+RewriteRule ^ - [F,L]
+
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+</IfModule>

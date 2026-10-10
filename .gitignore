@@ -1,0 +1,24 @@
+# --- Secrets: never commit ---
+public_html/includes/config.php
+public_html/includes/mail_config.php
+.env
+
+# --- Server leftovers that are not part of the project ---
+logs/
+mail.adhd.lk/
+server-backup-*/
+public_html/0fd3b80f424eb44ac38e3a6007c320b3.txt
+*.sql.gz
+*.zip
+
+# --- Database dumps with data (schema.sql is the only one we commit) ---
+database/*.sql
+!database/schema.sql
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp

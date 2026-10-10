@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin_articles
+Disallow: /settings
+Disallow: /logout
+Disallow: /delete_account
+Disallow: /api/
+
+Sitemap: https://adhd.lk/sitemap.xml

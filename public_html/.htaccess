@@ -1,0 +1,107 @@
+RewriteEngine On
+RewriteBase /
+
+# www.adhd.lk -> adhd.lk is done in PHP (includes/i18n.php): a HTTP_HOST rewrite
+# condition here never matched on this host.
+
+# ---------------------------------------------------------------
+# Force HTTPS (skipped when the connection is already secure, or
+# when a proxy/load balancer terminated TLS upstream).
+# ---------------------------------------------------------------
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+RewriteCond %{HTTP:X-Forwarded-SSL} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# ---------------------------------------------------------------
+# Block direct access to server-side-only directories and files.
+# (This host ignores <Require>/<FilesMatch>, but honours rewrites.)
+# ---------------------------------------------------------------
+RewriteRule ^(includes|lang)/ - [F,L]
+RewriteRule ^(db|migrate_[^/]*|seed_[^/]*)\.php$ - [F,L]
+
+# Sitemap
+RewriteRule ^sitemap\.xml$ sitemap.php [L]
+
+# Article pretty URLs: /article/<id>-<slug> -> article.php?id=<id>
+RewriteRule ^article/([0-9]+)(?:-[^/]*)?/?$ article.php?id=$1 [L,QSA]
+# Slug-only article URLs (used by internal links) -> looked up and 301'd to canonical
+RewriteRule ^article/([a-z0-9-]+)/?$ article.php?slug_only=$1 [L,QSA]
+
+# Redirect index.html to root
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.html\ HTTP/
+RewriteRule ^index\.html$ / [R=301,L]
+
+# Redirect .php extensions to extensionless URL.
+# GET only, and never for /api/ — a 301 turns POST into GET and drops the
+# request body, which silently breaks API calls.
+RewriteCond %{THE_REQUEST} ^GET\ /([^\ ]+)\.php
+RewriteCond %{REQUEST_URI} !^/api/
+RewriteRule ^/?(.*)\.php$ /$1 [L,R=301]
+
+# Internally serve .php files if they exist
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.*)$ $1.php [L]
+
+# Same for .html if needed (though the only one is index.html usually)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.*)$ $1.html [L]
+
+# ---------------------------------------------------------------
+# Security headers
+# ---------------------------------------------------------------
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=()"
+    # HSTS — only meaningful over HTTPS. 1 year.
+    Header always set Strict-Transport-Security "max-age=31536000" env=HTTPS
+</IfModule>
+
+# ---------------------------------------------------------------
+# Don't expose directory listings or internal PHP partials
+# ---------------------------------------------------------------
+Options -Indexes
+
+# Block direct web access to server-side-only files.
+<FilesMatch "^(db|migrate_.*|seed_.*)\.php$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# ---------------------------------------------------------------
+# Compression + caching for static assets
+# (all CSS/JS are requested with ?v= cache-busting query strings)
+# ---------------------------------------------------------------
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
+    AddOutputFilterByType DEFLATE application/javascript application/json application/xml
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+</IfModule>
+
+# Never cache the service worker or manifest aggressively
+<FilesMatch "^(sw\.js|manifest\.json)$">
+    <IfModule mod_headers.c>
+        Header set Cache-Control "no-cache, must-revalidate"
+    </IfModule>
+</FilesMatch>

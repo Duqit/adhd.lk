@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>You're offline | ADHD.lk</title>
+<style>
+  :root {
+    --bg: #0b1120; --card: rgba(22,30,54,.72); --border: rgba(148,163,184,.14);
+    --text: #f1f5f9; --muted: #a3b2c6; --accent: #6366f1; --accent2: #22d3ee;
+  }
+  @media (prefers-color-scheme: light) {
+    :root { --bg:#f4f6fb; --card:rgba(255,255,255,.8); --border:rgba(15,23,42,.12); --text:#1e293b; --muted:#475569; }
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Inter','Nirmala UI','Noto Sans Sinhala','Noto Sans Tamil',system-ui,sans-serif;
+    background: var(--bg); color: var(--text);
+    min-height: 100vh; display:flex; align-items:center; justify-content:center;
+    padding: 1.5rem; line-height:1.6; text-align:center;
+  }
+  .card {
+    background: var(--card); border:1px solid var(--border);
+    border-radius: 1.4rem; padding: 2.5rem 2rem; max-width: 460px; width:100%;
+  }
+  .icon { font-size: 3rem; margin-bottom: 1rem; }
+  h1 { font-size:1.6rem; margin-bottom:.75rem; letter-spacing:-.02em; }
+  p { color: var(--muted); margin-bottom: 1.75rem; }
+  .links { display:flex; flex-direction:column; gap:.6rem; }
+  a.btn {
+    display:block; padding:.8rem 1.4rem; border-radius:9999px;
+    font-weight:600; text-decoration:none; font-size:.95rem;
+    background: linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff;
+  }
+  a.ghost { background:transparent; border:1px solid var(--border); color:var(--text); }
+  .hint { font-size:.85rem; color:var(--muted); margin-top:1.5rem; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">📴</div>
+    <h1>You're offline</h1>
+    <p>No internet connection right now — but a few tools still work from your device.</p>
+    <div class="links">
+      <a class="btn" href="/timer">⏳ Focus Timer</a>
+      <a class="btn ghost" href="/breathe">🌬️ Calm Corner</a>
+      <a class="btn ghost" href="/">← Home</a>
+    </div>
+    <p class="hint">Anything you saved as a guest is stored on this device and is still safe.</p>
+  </div>
+  <script>
+    // Reload automatically as soon as the connection comes back.
+    window.addEventListener('online', () => location.reload());
+  </script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/duqit/adhd.lk/security/advisories/new
+    about: Please report security problems privately, not as a public issue.
+  - name: Personal support or questions about ADHD
+    url: https://adhd.lk/article/65-adhd-help-sri-lanka-directory
+    about: We can't give medical advice. This directory lists hospitals, clinics and helplines in Sri Lanka.
