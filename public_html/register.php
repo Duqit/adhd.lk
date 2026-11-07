@@ -58,7 +58,7 @@ $page_desc = t('seo_register_desc');
 require_once "includes/header.php";
 ?>
 
-    <main class="main-content container">
+    <main id="main" class="main-content container">
         <div class="auth-container glass-card">
             <h2 style="text-align: center;"><?php echo t('auth_create'); ?></h2>
             
@@ -111,16 +111,16 @@ require_once "includes/header.php";
             <form method="POST" action="" id="registerForm">
                 <input type="hidden" name="recaptcha_response" id="recaptchaResponse">
                 <div class="form-group">
-                    <label><?php echo t('auth_username'); ?></label>
-                    <input type="text" name="username" class="form-control" required>
+                    <label for="f-username"><?php echo t('auth_username'); ?></label>
+                    <input id="f-username" type="text" name="username" class="form-control" required>
                 </div>
                 <div class="form-group">
-                    <label><?php echo t('auth_email'); ?></label>
-                    <input type="email" name="email" class="form-control" required>
+                    <label for="f-email"><?php echo t('auth_email'); ?></label>
+                    <input id="f-email" type="email" name="email" class="form-control" required>
                 </div>
                 <div class="form-group">
-                    <label><?php echo t('auth_password'); ?></label>
-                    <input type="password" name="password" class="form-control" required minlength="8" autocomplete="new-password">
+                    <label for="f-password"><?php echo t('auth_password'); ?></label>
+                    <input id="f-password" type="password" name="password" class="form-control" required minlength="8" autocomplete="new-password">
                 </div>
                 <button type="submit" class="btn btn-primary btn-full"><?php echo t('auth_signup'); ?></button>
             </form>

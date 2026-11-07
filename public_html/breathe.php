@@ -5,7 +5,7 @@ $page_desc = t('seo_calm_desc');
 require_once "includes/header.php";
 ?>
 
-    <main class="main-content container">
+    <main id="main" class="main-content container">
         <div class="section-head" style="margin-bottom: 2rem;">
             <span class="chip"><?php echo t('calm_chip'); ?></span>
             <h1 style="margin-top: 1rem;"><?php echo t('calm_title'); ?></h1>
@@ -16,7 +16,7 @@ require_once "includes/header.php";
 
             <!-- Breathing exercise -->
             <section class="glass-card" style="flex: 1; min-width: 320px; max-width: 520px; text-align: center;">
-                <h3><?php echo t('calm_breathing'); ?></h3>
+                <h2 class="h3"><?php echo t('calm_breathing'); ?></h2>
                 <div class="timer-modes" style="margin-bottom: 0.5rem;">
                     <button class="mode-btn active" data-pattern="478"><?php echo t('calm_478'); ?></button>
                     <button class="mode-btn" data-pattern="box"><?php echo t('calm_box'); ?></button>
@@ -37,14 +37,14 @@ require_once "includes/header.php";
 
             <!-- 5-4-3-2-1 grounding -->
             <section class="glass-card" style="flex: 1; min-width: 320px; max-width: 520px;">
-                <h3 style="text-align: center;"><?php echo t('calm_ground_t'); ?></h3>
+                <h2 class="h3" style="text-align: center;"><?php echo t('calm_ground_t'); ?></h2>
                 <p style="color: var(--text-secondary); font-size: 0.92rem; text-align: center; margin-bottom: 1.5rem;"><?php echo t('calm_ground_sub'); ?></p>
                 <ul class="task-list" id="ground-list">
-                    <li class="task-item ground-step"><input type="checkbox" class="task-checkbox"><span class="task-title"><strong>5</strong> <?php echo t('calm_see'); ?></span></li>
-                    <li class="task-item ground-step"><input type="checkbox" class="task-checkbox"><span class="task-title"><strong>4</strong> <?php echo t('calm_touch'); ?></span></li>
-                    <li class="task-item ground-step"><input type="checkbox" class="task-checkbox"><span class="task-title"><strong>3</strong> <?php echo t('calm_hear'); ?></span></li>
-                    <li class="task-item ground-step"><input type="checkbox" class="task-checkbox"><span class="task-title"><strong>2</strong> <?php echo t('calm_smell'); ?></span></li>
-                    <li class="task-item ground-step"><input type="checkbox" class="task-checkbox"><span class="task-title"><strong>1</strong> <?php echo t('calm_taste'); ?></span></li>
+                    <li class="task-item ground-step"><input type="checkbox" class="task-checkbox" id="ground-5"><label class="task-title" for="ground-5"><strong>5</strong> <?php echo t('calm_see'); ?></label></li>
+                    <li class="task-item ground-step"><input type="checkbox" class="task-checkbox" id="ground-4"><label class="task-title" for="ground-4"><strong>4</strong> <?php echo t('calm_touch'); ?></label></li>
+                    <li class="task-item ground-step"><input type="checkbox" class="task-checkbox" id="ground-3"><label class="task-title" for="ground-3"><strong>3</strong> <?php echo t('calm_hear'); ?></label></li>
+                    <li class="task-item ground-step"><input type="checkbox" class="task-checkbox" id="ground-2"><label class="task-title" for="ground-2"><strong>2</strong> <?php echo t('calm_smell'); ?></label></li>
+                    <li class="task-item ground-step"><input type="checkbox" class="task-checkbox" id="ground-1"><label class="task-title" for="ground-1"><strong>1</strong> <?php echo t('calm_taste'); ?></label></li>
                 </ul>
                 <p id="ground-done" class="hidden" style="text-align: center; color: var(--color-break); font-weight: 600; margin-top: 1.5rem;"><?php echo t('calm_done_msg'); ?></p>
                 <div style="text-align: center; margin-top: 1.5rem;">

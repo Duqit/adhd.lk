@@ -5,7 +5,7 @@ $page_desc = t('priv_desc');
 require_once "includes/header.php";
 ?>
 
-<main class="main-content container" style="max-width: 780px;">
+<main id="main" class="main-content container" style="max-width: 780px;">
     <div style="width: 100%;">
         <h1><?php echo t('priv_title'); ?></h1>
         <p style="color: var(--text-faint); font-size: 0.9rem; margin-bottom: 2rem;">

@@ -5,7 +5,7 @@ $page_desc = t('seo_timer_desc');
 require_once "includes/header.php";
 ?>
 
-    <main class="main-content container">
+    <main id="main" class="main-content container">
         
         <div style="text-align: center; margin-bottom: 2rem;">
             <h1 style="font-size: 3rem; margin-bottom: 0.5rem;"><?php echo t('timer_title'); ?></h1>
@@ -18,7 +18,7 @@ require_once "includes/header.php";
             <section class="pomodoro-container glass-card" id="pomodoro" style="flex: 1; min-width: 320px; max-width: 500px; margin: 0;">
                 
                 <div class="intention-setting" style="margin-bottom: 1.5rem;">
-                    <input type="text" id="focus-intention" placeholder="<?php echo t('timer_intention_ph'); ?>" style="width: 100%; padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--bg-glass-border); background: var(--bg-input); color: var(--text-primary); outline: none; text-align: center;">
+                    <input type="text" id="focus-intention" aria-label="<?php echo t('timer_intention_ph'); ?>" placeholder="<?php echo t('timer_intention_ph'); ?>" style="width: 100%; padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--bg-glass-border); background: var(--bg-input); color: var(--text-primary); outline: none; text-align: center;">
                 </div>
 
                 <div class="timer-modes" id="timer-modes">
@@ -62,13 +62,13 @@ require_once "includes/header.php";
 
             <!-- Ambient Sound Mixer Section -->
             <section class="glass-card" style="flex: 1; min-width: 320px; max-width: 500px; margin: 0; padding: 1.5rem;" id="ambient-mixer">
-                <h3 style="text-align: center; margin-bottom: 1.5rem;"><?php echo t('timer_mixer'); ?></h3>
+                <h2 class="h3" style="text-align: center; margin-bottom: 1.5rem;"><?php echo t('timer_mixer'); ?></h2>
                 <p style="color: var(--text-secondary); font-size: 0.9rem; text-align: center; margin-bottom: 2rem;"><?php echo t('timer_mixer_sub'); ?></p>
                 
                 <div class="sound-control" style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
                     <span style="font-size: 1.5rem; width: 30px; text-align: center;">🟤</span>
                     <div style="flex: 1;">
-                        <label style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                        <label for="vol-brown" style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
                             <span><?php echo t('timer_brown'); ?></span>
                         </label>
                         <input type="range" id="vol-brown" min="0" max="1" step="0.01" value="0" style="width: 100%;">
@@ -78,7 +78,7 @@ require_once "includes/header.php";
                 <div class="sound-control" style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
                     <span style="font-size: 1.5rem; width: 30px; text-align: center;">🌧️</span>
                     <div style="flex: 1;">
-                        <label style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                        <label for="vol-rain" style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
                             <span><?php echo t('timer_rain'); ?></span>
                         </label>
                         <input type="range" id="vol-rain" min="0" max="1" step="0.01" value="0" style="width: 100%;">
@@ -88,7 +88,7 @@ require_once "includes/header.php";
                 <div class="sound-control" style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
                     <span style="font-size: 1.5rem; width: 30px; text-align: center;">🌊</span>
                     <div style="flex: 1;">
-                        <label style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                        <label for="vol-ocean" style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
                             <span><?php echo t('timer_ocean'); ?></span>
                         </label>
                         <input type="range" id="vol-ocean" min="0" max="1" step="0.01" value="0" style="width: 100%;">

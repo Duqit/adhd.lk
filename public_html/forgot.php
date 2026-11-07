@@ -74,7 +74,7 @@ $page_desc = t('seo_forgot_desc');
 require_once "includes/header.php";
 ?>
 
-    <main class="main-content container">
+    <main id="main" class="main-content container">
         <div class="auth-container glass-card">
             <h2 style="text-align: center;"><?php echo t('forgot_title'); ?></h2>
 
@@ -91,8 +91,8 @@ require_once "includes/header.php";
 
                 <form method="POST" action="">
                     <div class="form-group">
-                        <label><?php echo t('auth_email'); ?></label>
-                        <input type="email" name="email" class="form-control" required autocomplete="email">
+                        <label for="f-email"><?php echo t('auth_email'); ?></label>
+                        <input id="f-email" type="email" name="email" class="form-control" required autocomplete="email">
                     </div>
                     <button type="submit" class="btn btn-primary btn-full"><?php echo t('forgot_btn'); ?></button>
                 </form>

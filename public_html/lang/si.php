@@ -36,6 +36,9 @@ return [
     'footer_copyright' => 'ADHD.lk — අවධානය සඳහා නිර්මිතයි. මෙය ස්වයං-උපකාර මෙවලම් පමණි, වෛද්‍ය උපදෙස් නොවේ.',
     'footer_developed_by' => '%s විසින් නිර්මාණය කරන ලදී',
     'footer_open_source' => 'GitHub හි විවෘත කේතය',
+    'a11y_skip' => 'අන්තර්ගතයට යන්න',
+    'a11y_habit_emoji' => 'මෙම පුරුද්ද සඳහා ඉමොජිය',
+    'a11y_task_done' => 'නිම කළා',
 
     /* ---- Homepage ---- */
     'home_chip' => '✦ නොමිලේ · පිවිසීම අවශ්‍ය නැත',

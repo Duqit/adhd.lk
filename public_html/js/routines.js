@@ -29,8 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
         btnAddStep.addEventListener('click', () => {
             const stepHtml = `
                 <div class="step-input-group">
-                    <input type="text" name="step_title[]" placeholder="${TJ('js_step_ph', 'e.g., Next step')}" required>
-                    <input type="number" name="step_duration[]" placeholder="${TJ('js_min_ph', 'Min')}" min="1" required>
+                    <input type="text" name="step_title[]" aria-label="${TJ('js_step_ph', 'e.g., Next step')}" placeholder="${TJ('js_step_ph', 'e.g., Next step')}" required>
+                    <input type="number" name="step_duration[]" aria-label="${TJ('js_min_ph', 'Min')}" placeholder="${TJ('js_min_ph', 'Min')}" min="1" required>
                     <button type="button" class="btn btn-secondary btn-remove-step" style="padding: 0 1rem; color: #ef4444;">&times;</button>
                 </div>
             `;

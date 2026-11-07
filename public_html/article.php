@@ -30,7 +30,7 @@ if (!$article) {
     http_response_code(404);
     $page_title = t('ui_article_404') . ' | ADHD.lk';
     require_once 'includes/header.php';
-    echo '<main class="main-content container" style="text-align:center;"><h1>404</h1><p style="color:var(--text-secondary);">'
+    echo '<main id="main" class="main-content container" style="text-align:center;"><h1>404</h1><p style="color:var(--text-secondary);">'
         . htmlspecialchars(t('ui_article_404'))
         . '</p><a href="/articles" class="btn btn-primary" style="margin-top:1.5rem;">' . t('dash_browse') . '</a></main>';
     require_once 'includes/footer.php';
@@ -177,7 +177,7 @@ if ($siblings) {
 require_once 'includes/header.php';
 ?>
 
-    <main class="main-content container" style="max-width: 820px;">
+    <main id="main" class="main-content container" style="max-width: 820px;">
         <article style="width: 100%;">
             <header style="margin-bottom: 2rem;">
                 <p style="margin-bottom: 1rem;"><a href="/articles" style="color: var(--accent-secondary); font-size: 0.9rem;">&larr; <?php echo t('nav_articles'); ?></a></p>
@@ -224,7 +224,7 @@ require_once 'includes/header.php';
 
         <!-- Tools CTA -->
         <div class="glass-card" style="width: 100%; margin-top: 3rem; text-align: center; border-color: rgba(99,102,241,0.35);">
-            <h3 style="font-size: 1.15rem;"><?php echo t('home_chip'); ?></h3>
+            <h2 class="h3" style="font-size: 1.15rem;"><?php echo t('home_chip'); ?></h2>
             <p style="color: var(--text-secondary); font-size: 0.95rem; max-width: 520px; margin: 0 auto 1.25rem auto;"><?php echo t('meta_default'); ?></p>
             <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
                 <a href="/timer" class="btn btn-primary"><?php echo t('footer_timer'); ?></a>
@@ -235,11 +235,11 @@ require_once 'includes/header.php';
 
         <?php if ($related): ?>
         <section style="width: 100%; margin-top: 3rem;">
-            <h3 style="margin-bottom: 1.25rem;"><?php echo t('ui_keep_reading'); ?></h3>
+            <h2 class="h3" style="margin-bottom: 1.25rem;"><?php echo t('ui_keep_reading'); ?></h2>
             <div class="article-grid" style="margin-bottom: 0;">
                 <?php foreach ($related as $rel): ?>
                     <a class="glass-card article-card" style="padding: 1.4rem; text-decoration: none; color: inherit;" href="/article/<?php echo $rel['id'] . '-' . urlencode($rel['slug'] ?: $rel['id']); ?>">
-                        <h4 class="article-title" style="font-size: 1.05rem;"><?php echo htmlspecialchars($rel['title']); ?></h4>
+                        <h3 class="article-title" style="font-size: 1.05rem;"><?php echo htmlspecialchars($rel['title']); ?></h3>
                         <p class="article-excerpt" style="margin-bottom: 0;"><?php echo htmlspecialchars(mb_substr($rel['excerpt'], 0, 120)); ?>…</p>
                     </a>
                 <?php endforeach; ?>

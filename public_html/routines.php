@@ -64,7 +64,7 @@ $page_desc = t('seo_rout_desc');
 require_once "includes/header.php";
 ?>
 
-    <main class="main-content container">
+    <main id="main" class="main-content container">
         <?php if (!$is_logged_in): ?>
             <div class="guest-banner">
                 <span><?php echo t('banner_routines'); ?></span>
@@ -82,23 +82,23 @@ require_once "includes/header.php";
 
         <!-- Create Routine Form -->
         <div class="glass-card hidden" id="create-routine-form" style="margin-bottom: 3rem; border: 1px solid var(--accent-primary); width: 100%;">
-            <h3><?php echo t('rout_create_title'); ?></h3>
+            <h2 class="h3"><?php echo t('rout_create_title'); ?></h2>
             <form method="POST" action="" id="routine-form">
                 <input type="hidden" name="action" value="create_routine">
                 <div class="form-group" style="margin-top: 1rem;">
-                    <label><?php echo t('rout_name_label'); ?></label>
+                    <label for="routine-name-input"><?php echo t('rout_name_label'); ?></label>
                     <input type="text" name="routine_name" id="routine-name-input" class="form-control" required>
                 </div>
 
                 <div id="steps-container">
                     <label style="display:block; margin-bottom: 0.5rem; color: var(--text-secondary);"><?php echo t('rout_steps'); ?></label>
                     <div class="step-input-group">
-                        <input type="text" name="step_title[]" placeholder="<?php echo t('rout_step1_ph'); ?>" required>
-                        <input type="number" name="step_duration[]" placeholder="<?php echo t('rout_min_ph'); ?>" min="1" required>
+                        <input type="text" name="step_title[]" aria-label="<?php echo t('rout_step1_ph'); ?>" placeholder="<?php echo t('rout_step1_ph'); ?>" required>
+                        <input type="number" name="step_duration[]" aria-label="<?php echo t('rout_min_ph'); ?>" placeholder="<?php echo t('rout_min_ph'); ?>" min="1" required>
                     </div>
                     <div class="step-input-group">
-                        <input type="text" name="step_title[]" placeholder="<?php echo t('rout_step2_ph'); ?>" required>
-                        <input type="number" name="step_duration[]" placeholder="<?php echo t('rout_min_ph'); ?>" min="1" required>
+                        <input type="text" name="step_title[]" aria-label="<?php echo t('rout_step2_ph'); ?>" placeholder="<?php echo t('rout_step2_ph'); ?>" required>
+                        <input type="number" name="step_duration[]" aria-label="<?php echo t('rout_min_ph'); ?>" placeholder="<?php echo t('rout_min_ph'); ?>" min="1" required>
                     </div>
                 </div>
 
@@ -114,7 +114,7 @@ require_once "includes/header.php";
         <!-- Starter templates for guests with no routines yet -->
         <?php if (!$is_logged_in): ?>
         <div id="routine-templates" class="hidden" style="width: 100%; margin-bottom: 2.5rem;">
-            <h3 style="margin-bottom: 1rem;"><?php echo t('rout_templates'); ?></h3>
+            <h2 class="h3" style="margin-bottom: 1rem;"><?php echo t('rout_templates'); ?></h2>
             <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
                 <button class="btn btn-secondary tpl-btn" data-tpl="morning"><?php echo t('rout_tpl_morning'); ?></button>
                 <button class="btn btn-secondary tpl-btn" data-tpl="shutdown"><?php echo t('rout_tpl_shutdown'); ?></button>

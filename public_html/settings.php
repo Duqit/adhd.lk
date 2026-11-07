@@ -99,7 +99,7 @@ $page_title = t('nav_settings') . ' | ADHD.lk';
 require_once "includes/header.php";
 ?>
 
-<main class="main-content container" style="max-width: 720px;">
+<main id="main" class="main-content container" style="max-width: 720px;">
     <div style="width: 100%;">
         <h1 style="margin-bottom: 2rem;"><?php echo t('nav_settings'); ?></h1>
 
@@ -143,17 +143,17 @@ require_once "includes/header.php";
                     <?php echo csrf_field(); ?>
                     <input type="hidden" name="action" value="change_password">
                     <div class="form-group">
-                        <label><?php echo t('set_pw_current'); ?></label>
-                        <input type="password" name="current_password" class="form-control" required autocomplete="current-password">
+                        <label for="f-current-password"><?php echo t('set_pw_current'); ?></label>
+                        <input id="f-current-password" type="password" name="current_password" class="form-control" required autocomplete="current-password">
                     </div>
                     <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
                         <div class="form-group" style="flex: 1; min-width: 200px;">
-                            <label><?php echo t('set_pw_new'); ?></label>
-                            <input type="password" name="new_password" class="form-control" required minlength="8" autocomplete="new-password">
+                            <label for="f-new-password"><?php echo t('set_pw_new'); ?></label>
+                            <input id="f-new-password" type="password" name="new_password" class="form-control" required minlength="8" autocomplete="new-password">
                         </div>
                         <div class="form-group" style="flex: 1; min-width: 200px;">
-                            <label><?php echo t('set_pw_confirm'); ?></label>
-                            <input type="password" name="confirm_password" class="form-control" required minlength="8" autocomplete="new-password">
+                            <label for="f-confirm-password"><?php echo t('set_pw_confirm'); ?></label>
+                            <input id="f-confirm-password" type="password" name="confirm_password" class="form-control" required minlength="8" autocomplete="new-password">
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary"><?php echo t('set_pw_btn'); ?></button>

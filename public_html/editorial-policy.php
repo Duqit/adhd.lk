@@ -71,7 +71,7 @@ $sections = [
 require_once "includes/header.php";
 ?>
 
-<main class="main-content container" style="max-width: 780px;">
+<main id="main" class="main-content container" style="max-width: 780px;">
     <div style="width: 100%;">
         <h1>Editorial policy</h1>
         <p style="color: var(--text-secondary); font-size: 1.05rem; margin-bottom: 0.5rem;">

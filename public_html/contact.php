@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 require_once "includes/header.php";
 ?>
 
-<main class="main-content container" style="max-width: 780px;">
+<main id="main" class="main-content container" style="max-width: 780px;">
     <div style="width: 100%;">
         <h1>Contact</h1>
         <p style="color: var(--text-secondary); font-size: 1.05rem; margin-bottom: 2rem;">
@@ -100,18 +100,18 @@ require_once "includes/header.php";
 
                 <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
                     <div class="form-group" style="flex: 1; min-width: 200px;">
-                        <label>Your name *</label>
-                        <input type="text" name="name" class="form-control" required maxlength="100" value="<?php echo htmlspecialchars($_POST['name'] ?? ''); ?>">
+                        <label for="f-name">Your name *</label>
+                        <input id="f-name" type="text" name="name" class="form-control" required maxlength="100" value="<?php echo htmlspecialchars($_POST['name'] ?? ''); ?>">
                     </div>
                     <div class="form-group" style="flex: 1; min-width: 200px;">
-                        <label>Your email *</label>
-                        <input type="email" name="email" class="form-control" required maxlength="150" value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>">
+                        <label for="f-email">Your email *</label>
+                        <input id="f-email" type="email" name="email" class="form-control" required maxlength="150" value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>What is this about?</label>
-                    <select name="topic" class="form-control">
+                    <label for="f-topic">What is this about?</label>
+                    <select id="f-topic" name="topic" class="form-control">
                         <?php foreach ($TOPICS as $k => $label): ?>
                             <option value="<?php echo $k; ?>" <?php echo (($_POST['topic'] ?? '') === $k) ? 'selected' : ''; ?>><?php echo htmlspecialchars($label); ?></option>
                         <?php endforeach; ?>
@@ -119,14 +119,14 @@ require_once "includes/header.php";
                 </div>
 
                 <div class="form-group">
-                    <label>Message *</label>
-                    <textarea name="message" rows="7" class="form-control" required maxlength="5000"><?php echo htmlspecialchars($_POST['message'] ?? ''); ?></textarea>
+                    <label for="f-message">Message *</label>
+                    <textarea id="f-message" name="message" rows="7" class="form-control" required maxlength="5000"><?php echo htmlspecialchars($_POST['message'] ?? ''); ?></textarea>
                 </div>
 
                 <!-- honeypot -->
                 <div style="position: absolute; left: -9999px;" aria-hidden="true">
-                    <label>Website</label>
-                    <input type="text" name="website" tabindex="-1" autocomplete="off">
+                    <label for="f-website">Website</label>
+                    <input id="f-website" type="text" name="website" tabindex="-1" autocomplete="off">
                 </div>
 
                 <button type="submit" class="btn btn-primary">Send message</button>

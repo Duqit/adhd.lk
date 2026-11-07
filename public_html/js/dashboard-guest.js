@@ -71,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 '</span>' +
                 '<button class="task-del" title="Remove">&times;</button>';
 
+            li.querySelector('.task-checkbox').setAttribute('aria-label', TJ('a11y_task_done', 'Done') + ': ' + t.title);
             li.querySelector('.task-checkbox').addEventListener('change', () => {
                 const all = Store.get(K.tasks, []);
                 const item = all.find(x => x.id === t.id);

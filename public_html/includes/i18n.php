@@ -60,7 +60,8 @@ if (!function_exists('t')) {
             'js_breath_start', 'js_breath_stop', 'js_inhale', 'js_hold', 'js_exhale',
             'js_tpl_morning', 'js_tpl_shutdown', 'js_tpl_desk',
             'rout_total', 'rout_mins', 'rout_start',
-            'js_session_done', 'js_break_done', 'js_stats', 'js_exit_fs', 'js_focus_label'
+            'js_session_done', 'js_break_done', 'js_stats', 'js_exit_fs', 'js_focus_label',
+            'a11y_task_done'
         ];
         $out = [];
         foreach ($keys as $k) { $out[$k] = t($k); }

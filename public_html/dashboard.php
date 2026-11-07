@@ -115,7 +115,7 @@ $page_desc = t('seo_dash_desc');
 require_once "includes/header.php";
 ?>
 
-    <main class="main-content container">
+    <main id="main" class="main-content container">
         <?php if (!$is_logged_in): ?>
             <div class="guest-banner">
                 <span><?php echo t('banner_planner'); ?></span>
@@ -145,7 +145,7 @@ require_once "includes/header.php";
 
             <!-- Top 3 Priority Board -->
             <div class="glass-card">
-                <h3><?php echo t('dash_top3'); ?></h3>
+                <h2 class="h3"><?php echo t('dash_top3'); ?></h2>
                 <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;"><?php echo t('dash_top3_sub'); ?></p>
 
                 <?php if ($is_logged_in): ?>
@@ -155,7 +155,7 @@ require_once "includes/header.php";
                                 <form method="POST" action="" style="display:flex; align-items: center; margin: 0;">
                                     <input type="hidden" name="action" value="toggle_task">
                                     <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
-                                    <input type="checkbox" class="task-checkbox" onchange="this.form.submit()" <?php echo $task['is_completed'] ? 'checked' : ''; ?>>
+                                    <input type="checkbox" class="task-checkbox" onchange="this.form.submit()" aria-label="<?php echo htmlspecialchars(t('a11y_task_done') . ': ' . $task['title']); ?>" <?php echo $task['is_completed'] ? 'checked' : ''; ?>>
                                 </form>
                                 <span class="task-title">
                                     <?php echo htmlspecialchars($task['title']); ?>
@@ -178,8 +178,8 @@ require_once "includes/header.php";
                     ?>
                         <form method="POST" action="" class="add-task-form">
                             <input type="hidden" name="action" value="add_task">
-                            <input type="text" name="title" class="add-task-input" placeholder="<?php echo t('dash_add_ph'); ?>" required>
-                            <input type="number" name="est_mins" class="add-task-input input-narrow" placeholder="<?php echo t('dash_est_ph'); ?>" min="1">
+                            <input type="text" name="title" class="add-task-input" aria-label="<?php echo t('dash_add_ph'); ?>" placeholder="<?php echo t('dash_add_ph'); ?>" required>
+                            <input type="number" name="est_mins" class="add-task-input input-narrow" aria-label="<?php echo t('dash_est_ph'); ?>" placeholder="<?php echo t('dash_est_ph'); ?>" min="1">
                             <button type="submit" class="btn btn-primary"><?php echo t('dash_add'); ?></button>
                         </form>
                     <?php else: ?>
@@ -188,8 +188,8 @@ require_once "includes/header.php";
                 <?php else: ?>
                     <ul class="task-list" id="g-task-list"></ul>
                     <form class="add-task-form" id="g-task-form">
-                        <input type="text" id="g-task-title" class="add-task-input" placeholder="<?php echo t('dash_add_ph'); ?>" required>
-                        <input type="number" id="g-task-est" class="add-task-input input-narrow" placeholder="<?php echo t('dash_est_ph'); ?>" min="1">
+                        <input type="text" id="g-task-title" class="add-task-input" aria-label="<?php echo t('dash_add_ph'); ?>" placeholder="<?php echo t('dash_add_ph'); ?>" required>
+                        <input type="number" id="g-task-est" class="add-task-input input-narrow" aria-label="<?php echo t('dash_est_ph'); ?>" placeholder="<?php echo t('dash_est_ph'); ?>" min="1">
                         <button type="submit" class="btn btn-primary"><?php echo t('dash_add'); ?></button>
                     </form>
                     <p id="g-task-limit" class="hidden" style="color: var(--color-break); font-size: 0.9rem; margin-top: 1rem;"><?php echo t('dash_limit'); ?></p>
@@ -198,7 +198,7 @@ require_once "includes/header.php";
 
             <!-- Mood Check-In -->
             <div class="glass-card">
-                <h3><?php echo t('dash_checkin'); ?></h3>
+                <h2 class="h3"><?php echo t('dash_checkin'); ?></h2>
                 <?php if ($is_logged_in): ?>
                     <?php if ($today_mood): ?>
                         <div style="text-align: center; margin-top: 2rem;">
@@ -227,7 +227,7 @@ require_once "includes/header.php";
                                 <button type="button" class="mood-btn" data-value="4">🙂</button>
                                 <button type="button" class="mood-btn" data-value="5">😄</button>
                             </div>
-                            <input type="text" name="note" class="mood-note" placeholder="<?php echo t('dash_note_ph'); ?>">
+                            <input type="text" name="note" class="mood-note" aria-label="<?php echo t('dash_note_ph'); ?>" placeholder="<?php echo t('dash_note_ph'); ?>">
                             <button type="submit" class="btn btn-primary" style="width: 100%;"><?php echo t('dash_save_log'); ?></button>
                         </form>
                         <script>
@@ -257,7 +257,7 @@ require_once "includes/header.php";
                             <button type="button" class="mood-btn" data-value="4">🙂</button>
                             <button type="button" class="mood-btn" data-value="5">😄</button>
                         </div>
-                        <input type="text" id="g-mood-note-input" class="mood-note" placeholder="<?php echo t('dash_note_ph'); ?>">
+                        <input type="text" id="g-mood-note-input" class="mood-note" aria-label="<?php echo t('dash_note_ph'); ?>" placeholder="<?php echo t('dash_note_ph'); ?>">
                         <button type="button" id="g-mood-save" class="btn btn-primary" style="width: 100%;"><?php echo t('dash_save_log'); ?></button>
                     </div>
                 <?php endif; ?>
@@ -265,7 +265,7 @@ require_once "includes/header.php";
 
             <!-- Gamification Stats -->
             <div class="glass-card">
-                <h3><?php echo t('dash_progress'); ?></h3>
+                <h2 class="h3"><?php echo t('dash_progress'); ?></h2>
                 <div style="text-align: center; margin-top: 1.5rem;">
                     <div class="level-badge" id="g-level"><?php echo $is_logged_in ? $user_stats['level'] : '1'; ?></div>
                     <div style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.5rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;"><?php echo t('dash_level'); ?></div>
@@ -284,7 +284,7 @@ require_once "includes/header.php";
 
             <!-- Brain Dump Inbox (local for everyone) -->
             <div class="glass-card">
-                <h3><?php echo t('dash_dump'); ?></h3>
+                <h2 class="h3"><?php echo t('dash_dump'); ?></h2>
                 <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;"><?php echo t('dash_dump_sub'); ?></p>
                 <ul class="task-list" id="dump-list"></ul>
                 <p id="dump-empty" style="color: var(--text-secondary); font-size: 0.9rem; text-align: center; margin-top: 1.5rem;"><?php echo t('dash_dump_empty'); ?></p>
@@ -293,7 +293,7 @@ require_once "includes/header.php";
             <?php if ($is_logged_in): ?>
             <!-- Saved Articles -->
             <div class="glass-card">
-                <h3><?php echo t('dash_saved'); ?></h3>
+                <h2 class="h3"><?php echo t('dash_saved'); ?></h2>
                 <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;"><?php echo t('dash_saved_sub'); ?></p>
                 <ul class="task-list">
                     <?php foreach ($bookmarked_articles as $article): ?>

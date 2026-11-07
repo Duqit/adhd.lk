@@ -36,6 +36,9 @@ return [
     'footer_copyright' => 'ADHD.lk — Built for focus. This site offers self-help tools, not medical advice.',
     'footer_developed_by' => 'Developed by %s',
     'footer_open_source' => 'Open source on GitHub',
+    'a11y_skip' => 'Skip to content',
+    'a11y_habit_emoji' => 'Emoji for this habit',
+    'a11y_task_done' => 'Done',
 
     /* ---- Homepage ---- */
     'home_chip' => '✦ Free · No login needed',

@@ -244,7 +244,7 @@ try {
 ?>
 <?php $page_title = "Article CMS | ADHD.lk Admin"; require_once "includes/header.php"; ?>
 
-    <main class="main-content container" style="align-items: stretch;">
+    <main id="main" class="main-content container" style="align-items: stretch;">
         <div class="admin-header">
             <div>
                 <h2>Article Management</h2>

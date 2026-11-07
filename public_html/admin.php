@@ -58,7 +58,7 @@ $users = $stmt->fetchAll();
 ?>
 <?php $page_title = "User Management | ADHD.lk Admin"; require_once "includes/header.php"; ?>
 
-    <main class="main-content container" style="align-items: stretch;">
+    <main id="main" class="main-content container" style="align-items: stretch;">
         <div class="admin-header">
             <div>
                 <h2>User Management</h2>

@@ -75,7 +75,7 @@ $page_canonical = 'https://adhd.lk/articles';
 require_once "includes/header.php";
 ?>
 
-    <main class="main-content container">
+    <main id="main" class="main-content container">
         <div style="text-align: center; margin-bottom: 3rem;">
             <h1 style="font-size: 3rem; margin-bottom: 1rem;"><?php echo t('home_articles_t'); ?></h1>
             <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto;"><?php echo t('home_articles_d'); ?></p>
@@ -118,7 +118,7 @@ require_once "includes/header.php";
 
                     <div class="article-content">
                         <div class="article-tags"><?php echo htmlspecialchars($article['tags']); ?></div>
-                        <h3 class="article-title"><a href="<?php echo htmlspecialchars($url); ?>" style="color: inherit;"><?php echo htmlspecialchars($article['title']); ?></a></h3>
+                        <h2 class="article-title"><a href="<?php echo htmlspecialchars($url); ?>" style="color: inherit;"><?php echo htmlspecialchars($article['title']); ?></a></h2>
                         <p class="article-excerpt"><?php echo htmlspecialchars($article['excerpt']); ?></p>
                         <a class="btn btn-secondary" href="<?php echo htmlspecialchars($url); ?>" style="width: 100%;"><?php echo t('ui_read_article'); ?> →</a>
                     </div>

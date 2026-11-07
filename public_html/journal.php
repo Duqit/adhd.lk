@@ -58,7 +58,7 @@ $page_desc = t('seo_jour_desc');
 require_once "includes/header.php";
 ?>
 
-    <main class="main-content container journal-container">
+    <main id="main" class="main-content container journal-container">
         <?php if (!$is_logged_in): ?>
             <div class="guest-banner">
                 <span><?php echo t('banner_journal'); ?></span>
@@ -74,11 +74,11 @@ require_once "includes/header.php";
         <?php if ($is_logged_in): ?>
             <?php if (!$journaled_today): ?>
                 <div class="prompt-box">
-                    <h3 style="color: var(--text-secondary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem;"><?php echo t('jour_prompt_label'); ?></h3>
+                    <h2 class="h3" style="color: var(--text-secondary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem;"><?php echo t('jour_prompt_label'); ?></h2>
                     <h2 style="margin-bottom: 2rem; font-weight: 500;">"<?php echo htmlspecialchars($daily_prompt); ?>"</h2>
                     <form method="POST" action="">
                         <input type="hidden" name="action" value="save_journal">
-                        <textarea name="entry_text" rows="5" placeholder="<?php echo t('jour_ph'); ?>" required style="margin-bottom: 1rem; resize: vertical;"></textarea>
+                        <textarea name="entry_text" rows="5" aria-label="<?php echo t('jour_ph'); ?>" placeholder="<?php echo t('jour_ph'); ?>" required style="margin-bottom: 1rem; resize: vertical;"></textarea>
                         <button type="submit" class="btn btn-primary" style="width: 100%;"><?php echo t('jour_save'); ?></button>
                     </form>
                 </div>
@@ -106,9 +106,9 @@ require_once "includes/header.php";
         <?php else: ?>
             <!-- GUEST MODE -->
             <div class="prompt-box" id="g-journal-box">
-                <h3 style="color: var(--text-secondary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem;"><?php echo t('jour_prompt_label'); ?></h3>
+                <h2 class="h3" style="color: var(--text-secondary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem;"><?php echo t('jour_prompt_label'); ?></h2>
                 <h2 style="margin-bottom: 2rem; font-weight: 500;">"<?php echo htmlspecialchars($daily_prompt); ?>"</h2>
-                <textarea id="g-journal-text" rows="5" placeholder="<?php echo t('jour_ph'); ?>" style="margin-bottom: 1rem; resize: vertical;"></textarea>
+                <textarea id="g-journal-text" rows="5" aria-label="<?php echo t('jour_ph'); ?>" placeholder="<?php echo t('jour_ph'); ?>" style="margin-bottom: 1rem; resize: vertical;"></textarea>
                 <button type="button" id="g-journal-save" class="btn btn-primary" style="width: 100%;"><?php echo t('jour_save'); ?></button>
             </div>
             <div class="prompt-box hidden" id="g-journal-done" style="border-color: var(--color-break);">

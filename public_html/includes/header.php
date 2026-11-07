@@ -136,6 +136,7 @@ function nav_active($page, $current) {
     </script>
 </head>
 <body>
+    <a class="skip-link" href="#main"><?php echo t('a11y_skip'); ?></a>
     <header class="navbar" id="navbar">
         <a href="/" class="logo">ADHD.lk<?php echo $is_admin ? ' <span style="font-size: 0.9rem; color: var(--accent-secondary);">Admin</span>' : ''; ?></a>
         <nav class="nav-links" id="nav-links">

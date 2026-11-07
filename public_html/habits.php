@@ -105,7 +105,7 @@ $page_desc = t('seo_hab_desc');
 require_once "includes/header.php";
 ?>
 
-    <main class="main-content container" style="max-width: 860px;">
+    <main id="main" class="main-content container" style="max-width: 860px;">
         <?php if (!$is_logged_in): ?>
             <div class="guest-banner">
                 <span><?php echo t('banner_habits'); ?></span>
@@ -121,19 +121,19 @@ require_once "includes/header.php";
         </div>
 
         <div class="glass-card" style="width: 100%; margin-bottom: 2rem;">
-            <h3 style="font-size: 1.05rem;"><?php echo t('hab_add_t'); ?></h3>
+            <h2 class="h3" style="font-size: 1.05rem;"><?php echo t('hab_add_t'); ?></h2>
             <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 1rem;"><?php echo t('hab_add_sub'); ?></p>
             <?php if ($is_logged_in): ?>
                 <form method="POST" action="" class="add-task-form" style="margin-top: 0;">
                     <input type="hidden" name="action" value="add_habit">
-                    <input type="text" name="habit_emoji" class="add-task-input input-narrow" style="text-align:center;" placeholder="😀" maxlength="8">
-                    <input type="text" name="habit_name" class="add-task-input" placeholder="<?php echo t('hab_name_ph'); ?>" required maxlength="120">
+                    <input type="text" name="habit_emoji" class="add-task-input input-narrow" style="text-align:center;" aria-label="<?php echo t('a11y_habit_emoji'); ?>" placeholder="😀" maxlength="8">
+                    <input type="text" name="habit_name" class="add-task-input" aria-label="<?php echo t('hab_name_ph'); ?>" placeholder="<?php echo t('hab_name_ph'); ?>" required maxlength="120">
                     <button type="submit" class="btn btn-primary"><?php echo t('hab_add_btn'); ?></button>
                 </form>
             <?php else: ?>
                 <form class="add-task-form" id="g-habit-form" style="margin-top: 0;">
-                    <input type="text" id="g-habit-emoji" class="add-task-input input-narrow" style="text-align:center;" placeholder="😀" maxlength="8">
-                    <input type="text" id="g-habit-name" class="add-task-input" placeholder="<?php echo t('hab_name_ph'); ?>" required maxlength="120">
+                    <input type="text" id="g-habit-emoji" class="add-task-input input-narrow" style="text-align:center;" aria-label="<?php echo t('a11y_habit_emoji'); ?>" placeholder="😀" maxlength="8">
+                    <input type="text" id="g-habit-name" class="add-task-input" aria-label="<?php echo t('hab_name_ph'); ?>" placeholder="<?php echo t('hab_name_ph'); ?>" required maxlength="120">
                     <button type="submit" class="btn btn-primary"><?php echo t('hab_add_btn'); ?></button>
                 </form>
             <?php endif; ?>

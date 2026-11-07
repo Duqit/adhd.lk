@@ -21,7 +21,7 @@ $page_jsonld = '<script type="application/ld+json">' . json_encode([
 require_once "includes/header.php";
 ?>
 
-    <main class="main-content container">
+    <main id="main" class="main-content container">
         <div class="section-head" style="margin-bottom: 2rem;">
             <span class="chip"><?php echo t('asrs_chip'); ?></span>
             <h1 style="margin-top: 1rem;"><?php echo t('asrs_title'); ?></h1>
@@ -32,10 +32,10 @@ require_once "includes/header.php";
         </div>
 
         <div class="glass-card quiz-card" id="quiz-area">
-            <h3 style="margin-bottom: 0.25rem;"><?php echo t('asrs_part_a'); ?> <span style="color: var(--text-secondary); font-weight: 400; font-size: 0.9rem;"><?php echo t('asrs_part_a_sub'); ?></span></h3>
+            <h2 class="h3" style="margin-bottom: 0.25rem;"><?php echo t('asrs_part_a'); ?> <span style="color: var(--text-secondary); font-weight: 400; font-size: 0.9rem;"><?php echo t('asrs_part_a_sub'); ?></span></h2>
             <div id="part-a"></div>
 
-            <h3 style="margin: 2rem 0 0.25rem 0;"><?php echo t('asrs_part_b'); ?> <span style="color: var(--text-secondary); font-weight: 400; font-size: 0.9rem;"><?php echo t('asrs_part_b_sub'); ?></span></h3>
+            <h2 class="h3" style="margin: 2rem 0 0.25rem 0;"><?php echo t('asrs_part_b'); ?> <span style="color: var(--text-secondary); font-weight: 400; font-size: 0.9rem;"><?php echo t('asrs_part_b_sub'); ?></span></h2>
             <div id="part-b"></div>
 
             <div style="text-align: center; margin-top: 2rem;">

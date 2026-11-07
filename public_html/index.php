@@ -16,7 +16,7 @@ try {
 require_once "includes/header.php";
 ?>
 
-    <main class="main-content container">
+    <main id="main" class="main-content container">
 
         <!-- Hero Section -->
         <section class="hero">

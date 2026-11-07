@@ -57,7 +57,7 @@ $page_desc = t('seo_login_desc');
 require_once "includes/header.php";
 ?>
 
-    <main class="main-content container">
+    <main id="main" class="main-content container">
         <div class="auth-container glass-card">
             <h2 style="text-align: center;"><?php echo t('auth_welcome'); ?></h2>
 
@@ -107,12 +107,12 @@ require_once "includes/header.php";
             <form method="POST" action="" id="loginForm">
                 <input type="hidden" name="recaptcha_response" id="recaptchaResponse">
                 <div class="form-group">
-                    <label><?php echo t('auth_username'); ?></label>
-                    <input type="text" name="username" class="form-control" required autocomplete="username">
+                    <label for="f-username"><?php echo t('auth_username'); ?></label>
+                    <input id="f-username" type="text" name="username" class="form-control" required autocomplete="username">
                 </div>
                 <div class="form-group">
-                    <label><?php echo t('auth_password'); ?></label>
-                    <input type="password" name="password" class="form-control" required autocomplete="current-password">
+                    <label for="f-password"><?php echo t('auth_password'); ?></label>
+                    <input id="f-password" type="password" name="password" class="form-control" required autocomplete="current-password">
                 </div>
                 <button type="submit" class="btn btn-primary btn-full"><?php echo t('auth_login'); ?></button>
             </form>

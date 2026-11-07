@@ -61,7 +61,7 @@ $page_desc = t('seo_reset_desc');
 require_once "includes/header.php";
 ?>
 
-    <main class="main-content container">
+    <main id="main" class="main-content container">
         <div class="auth-container glass-card">
             <h2 style="text-align: center;"><?php echo t('reset_title'); ?></h2>
 
@@ -83,12 +83,12 @@ require_once "includes/header.php";
                 <form method="POST" action="">
                     <input type="hidden" name="token" value="<?php echo htmlspecialchars($token); ?>">
                     <div class="form-group">
-                        <label><?php echo t('set_pw_new'); ?></label>
-                        <input type="password" name="new_password" class="form-control" required minlength="8" autocomplete="new-password">
+                        <label for="f-new-password"><?php echo t('set_pw_new'); ?></label>
+                        <input id="f-new-password" type="password" name="new_password" class="form-control" required minlength="8" autocomplete="new-password">
                     </div>
                     <div class="form-group">
-                        <label><?php echo t('set_pw_confirm'); ?></label>
-                        <input type="password" name="confirm_password" class="form-control" required minlength="8" autocomplete="new-password">
+                        <label for="f-confirm-password"><?php echo t('set_pw_confirm'); ?></label>
+                        <input id="f-confirm-password" type="password" name="confirm_password" class="form-control" required minlength="8" autocomplete="new-password">
                     </div>
                     <button type="submit" class="btn btn-primary btn-full"><?php echo t('reset_btn'); ?></button>
                 </form>
