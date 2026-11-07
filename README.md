@@ -30,6 +30,25 @@ Every tool works **without an account**: data stays in the browser's `localStora
 free account syncs it across devices, and anything done as a guest is copied into the new
 account once.
 
+## Screenshots
+
+![Visual focus timer with the ambient sound mixer](docs/screenshots/timer-desktop.png)
+
+<table>
+  <tr>
+    <td><img src="docs/screenshots/planner-mobile.png" alt="Today planner on a phone: top 3 priorities and a daily check-in" width="250"></td>
+    <td><img src="docs/screenshots/selftest-mobile.png" alt="The ASRS v1.1 adult ADHD self-test on a phone" width="250"></td>
+    <td><img src="docs/screenshots/calm-mobile.png" alt="Calm corner on a phone: guided 4-7-8 and box breathing" width="250"></td>
+  </tr>
+  <tr>
+    <td align="center">Today planner</td>
+    <td align="center">ADHD self-test</td>
+    <td align="center">Calm corner</td>
+  </tr>
+</table>
+
+![The home page in the dark theme](docs/screenshots/home-desktop-dark.png)
+
 ## Privacy principles
 
 - **Guest data never leaves your device.** We cannot read it.
