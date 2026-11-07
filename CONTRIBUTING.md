@@ -40,6 +40,13 @@ The project is plain PHP, vanilla JavaScript and one CSS file, on purpose. Pleas
 - **Text.** Every user-facing string goes in `public_html/lang/en.php` with a matching key in
   `si.php` and `ta.php`. Use `t('key')` in templates. If you can't translate a string, add the
   English text and mention it in your pull request.
+- **Accessibility.** Every form field needs a name a screen reader can announce: a
+  `<label for>` or an `aria-label`, not just a placeholder. Never remove the focus outline
+  (`outline: none`), since keyboard users rely on the `:focus-visible` ring. Headings go in
+  order (h1 → h2 → h3); use `<h2 class="h3">` when a section heading should look smaller.
+- **Caching.** CSS and JS are cached for a week under their `?v=` URL. If you change
+  `css/style.css` or a file in `js/`, bump the `?v=` where it's loaded (`includes/header.php`,
+  `includes/footer.php` or the page itself).
 - **Match the surrounding code**: naming, comment style, indentation.
 - **Never commit secrets.** `includes/config.php` and `includes/mail_config.php` are gitignored;
   only edit the `*.sample.php` versions.
@@ -64,7 +71,8 @@ These follow the site's [editorial policy](https://adhd.lk/editorial-policy):
 2. Keep each pull request focused on one change.
 3. Test it locally: the pages you touched, in all three languages, logged out **and** logged in,
    on a phone-sized window, in both dark and light themes.
-4. Run `php -l` on the PHP files you changed.
+4. Run `php -l` on the PHP files you changed. GitHub runs the same check on PHP 8.1 and 8.4,
+   plus a secret scan, on every pull request.
 5. Describe what changed and why. Add screenshots for visual changes.
 
 By contributing you agree that your code is licensed under the AGPL-3.0 and your written content
