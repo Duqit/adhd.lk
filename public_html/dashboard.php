@@ -3,12 +3,16 @@ require_once __DIR__ . '/includes/boot.php';
 adhd_session_start();
 
 $is_logged_in = isset($_SESSION['user_id']);
+// Anti-forgery tokens for the logged-in forms. Never loaded for guests: it starts a
+// session, which would make the page uncacheable.
+if ($is_logged_in) require_once __DIR__ . '/includes/csrf.php';
 
 // ---------------------------------------------------------
 // LOGGED-IN MODE: server-side data (database)
 // ---------------------------------------------------------
 if ($is_logged_in) {
     require_once 'db.php';
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') csrf_check(); // every logged-in form carries a token
     $user_id = $_SESSION['user_id'];
     $today = date('Y-m-d');
 
@@ -31,8 +35,8 @@ if ($is_logged_in) {
 
     // Add new Top 3 Task
     if (isset($_POST['action']) && $_POST['action'] === 'add_task') {
-        $title = trim($_POST['title']);
-        $est_mins = isset($_POST['est_mins']) && is_numeric($_POST['est_mins']) ? (int)$_POST['est_mins'] : null;
+        $title = trim((string)($_POST['title'] ?? ''));
+        $est_mins = isset($_POST['est_mins']) && is_numeric($_POST['est_mins']) ? (int)($_POST['est_mins'] ?? 0) : null;
         if (!empty($title)) {
             $stmt = $pdo->prepare("SELECT COUNT(*) FROM tasks WHERE user_id = ? AND created_at = ? AND is_completed = FALSE");
             $stmt->execute([$user_id, $today]);
@@ -47,7 +51,7 @@ if ($is_logged_in) {
 
     // Toggle Task Completion
     if (isset($_POST['action']) && $_POST['action'] === 'toggle_task') {
-        $task_id = (int)$_POST['task_id'];
+        $task_id = (int)($_POST['task_id'] ?? 0);
         $stmt = $pdo->prepare("SELECT is_completed FROM tasks WHERE id = ? AND user_id = ?");
         $stmt->execute([$task_id, $user_id]);
         $task = $stmt->fetch();
@@ -65,7 +69,7 @@ if ($is_logged_in) {
 
     // Delete Task
     if (isset($_POST['action']) && $_POST['action'] === 'delete_task') {
-        $task_id = (int)$_POST['task_id'];
+        $task_id = (int)($_POST['task_id'] ?? 0);
         $stmt = $pdo->prepare("DELETE FROM tasks WHERE id = ? AND user_id = ?");
         $stmt->execute([$task_id, $user_id]);
         header("Location: dashboard");
@@ -75,7 +79,7 @@ if ($is_logged_in) {
     // Log Mood
     if (isset($_POST['action']) && $_POST['action'] === 'log_mood') {
         $mood_score = max(1, min(5, (int)($_POST['mood'] ?? 3)));
-        $note = trim($_POST['note']);
+        $note = trim((string)($_POST['note'] ?? ''));
         $stmt = $pdo->prepare("INSERT INTO moods (user_id, mood_score, note) VALUES (?, ?, ?)");
         $stmt->execute([$user_id, $mood_score, $note]);
         addXP($pdo, $user_id, 5);
@@ -153,6 +157,7 @@ require_once "includes/header.php";
                         <?php foreach ($tasks as $task): ?>
                             <li class="task-item <?php echo $task['is_completed'] ? 'completed' : ''; ?>">
                                 <form method="POST" action="" style="display:flex; align-items: center; margin: 0;">
+                                    <?php if ($is_logged_in) echo csrf_field(); ?>
                                     <input type="hidden" name="action" value="toggle_task">
                                     <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
                                     <input type="checkbox" class="task-checkbox" onchange="this.form.submit()" aria-label="<?php echo htmlspecialchars(t('a11y_task_done') . ': ' . $task['title']); ?>" <?php echo $task['is_completed'] ? 'checked' : ''; ?>>
@@ -164,6 +169,7 @@ require_once "includes/header.php";
                                     <?php endif; ?>
                                 </span>
                                 <form method="POST" action="" style="margin:0;">
+                                    <?php if ($is_logged_in) echo csrf_field(); ?>
                                     <input type="hidden" name="action" value="delete_task">
                                     <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
                                     <button type="submit" class="task-del" title="Remove">&times;</button>
@@ -177,6 +183,7 @@ require_once "includes/header.php";
                     if ($active_tasks < 3):
                     ?>
                         <form method="POST" action="" class="add-task-form">
+                            <?php if ($is_logged_in) echo csrf_field(); ?>
                             <input type="hidden" name="action" value="add_task">
                             <input type="text" name="title" class="add-task-input" aria-label="<?php echo t('dash_add_ph'); ?>" placeholder="<?php echo t('dash_add_ph'); ?>" required>
                             <input type="number" name="est_mins" class="add-task-input input-narrow" aria-label="<?php echo t('dash_est_ph'); ?>" placeholder="<?php echo t('dash_est_ph'); ?>" min="1">
@@ -218,6 +225,7 @@ require_once "includes/header.php";
                     <?php else: ?>
                         <p style="color: var(--text-secondary); font-size: 0.9rem;"><?php echo t('dash_checkin_q'); ?></p>
                         <form method="POST" action="" id="mood-form">
+                            <?php if ($is_logged_in) echo csrf_field(); ?>
                             <input type="hidden" name="action" value="log_mood">
                             <input type="hidden" name="mood" id="mood-input" value="" required>
                             <div class="mood-emojis">

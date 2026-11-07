@@ -11,6 +11,19 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
+// Same-site requests only: a page on another site must not be able to post into this
+// account. (Browsers always send Origin on cross-site POSTs.)
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+if ($origin !== '') {
+    $o = parse_url($origin);
+    $origin_host = ($o['host'] ?? '') . (isset($o['port']) ? ':' . $o['port'] : '');
+    if (strcasecmp($origin_host, $_SERVER['HTTP_HOST'] ?? '') !== 0) {
+        http_response_code(403);
+        echo json_encode(['ok' => false, 'error' => 'Cross-site request refused']);
+        exit;
+    }
+}
+
 require_once __DIR__ . '/../db.php';
 $user_id = $_SESSION['user_id'];
 

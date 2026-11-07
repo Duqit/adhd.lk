@@ -5,6 +5,9 @@ require_once 'includes/i18n.php';
 require_once 'db.php';
 
 $is_logged_in = isset($_SESSION['user_id']);
+// Anti-forgery tokens for the logged-in forms. Never loaded for guests: it starts a
+// session, which would make the page uncacheable.
+if ($is_logged_in) require_once __DIR__ . '/includes/csrf.php';
 $user_id = $is_logged_in ? $_SESSION['user_id'] : null;
 
 // Handle Bookmarking
@@ -13,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         header("Location: login");
         exit;
     }
+    csrf_check();
 
     $article_id = (int)$_POST['article_id'];
 
@@ -108,6 +112,7 @@ require_once "includes/header.php";
 
                     <?php if ($is_logged_in): ?>
                     <form method="POST" action="">
+                        <?php if ($is_logged_in) echo csrf_field(); ?>
                         <input type="hidden" name="action" value="toggle_bookmark">
                         <input type="hidden" name="article_id" value="<?php echo $article['id']; ?>">
                         <button type="submit" class="bookmark-btn" aria-label="<?php echo t('ui_save_later'); ?>" title="<?php echo t('ui_save_later'); ?>">

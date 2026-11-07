@@ -8,6 +8,9 @@ require_once 'db.php';
 require_once 'includes/article_links.php';
 
 $is_logged_in = isset($_SESSION['user_id']);
+// Anti-forgery tokens for the logged-in forms. Never loaded for guests: it starts a
+// session, which would make the page uncacheable.
+if ($is_logged_in) require_once __DIR__ . '/includes/csrf.php';
 $user_id = $is_logged_in ? $_SESSION['user_id'] : null;
 
 $article_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
@@ -60,6 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($article['slug'])) {
 // Handle bookmark toggle
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'toggle_bookmark') {
     if (!$is_logged_in) { header("Location: /login"); exit; }
+    csrf_check();
     $stmt = $pdo->prepare("SELECT id FROM user_bookmarks WHERE user_id = ? AND article_id = ?");
     $stmt->execute([$user_id, $article_id]);
     $bookmark = $stmt->fetch();
@@ -195,6 +199,7 @@ require_once 'includes/header.php';
                     </span>
                     <?php if ($is_logged_in): ?>
                         <form method="POST" action="" style="margin: 0;">
+                            <?php if ($is_logged_in) echo csrf_field(); ?>
                             <input type="hidden" name="action" value="toggle_bookmark">
                             <button type="submit" class="btn btn-secondary" style="font-size: 0.82rem; padding: 0.35rem 0.9rem;">
                                 <?php echo $is_bookmarked ? '⭐ ' . t('ui_saved') : '☆ ' . t('ui_save_later'); ?>

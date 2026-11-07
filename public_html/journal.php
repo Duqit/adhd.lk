@@ -3,6 +3,9 @@ require_once __DIR__ . '/includes/boot.php';
 adhd_session_start();
 
 $is_logged_in = isset($_SESSION['user_id']);
+// Anti-forgery tokens for the logged-in forms. Never loaded for guests: it starts a
+// session, which would make the page uncacheable.
+if ($is_logged_in) require_once __DIR__ . '/includes/csrf.php';
 
 // Prompts come from the language files (lang/*.php)
 require_once 'includes/i18n.php';
@@ -14,11 +17,12 @@ $journaled_today = false;
 
 if ($is_logged_in) {
     require_once 'db.php';
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') csrf_check(); // every logged-in form carries a token
     $user_id = $_SESSION['user_id'];
     $today = date('Y-m-d');
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'save_journal') {
-        $entry = trim($_POST['entry_text']);
+        $entry = trim((string)($_POST['entry_text'] ?? ''));
         if (!empty($entry)) {
             $stmt = $pdo->prepare("INSERT INTO journal_entries (user_id, prompt, entry_text) VALUES (?, ?, ?)");
             $stmt->execute([$user_id, $daily_prompt, $entry]);
@@ -77,6 +81,7 @@ require_once "includes/header.php";
                     <h2 class="h3" style="color: var(--text-secondary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem;"><?php echo t('jour_prompt_label'); ?></h2>
                     <h2 style="margin-bottom: 2rem; font-weight: 500;">"<?php echo htmlspecialchars($daily_prompt); ?>"</h2>
                     <form method="POST" action="">
+                        <?php if ($is_logged_in) echo csrf_field(); ?>
                         <input type="hidden" name="action" value="save_journal">
                         <textarea name="entry_text" rows="5" aria-label="<?php echo t('jour_ph'); ?>" placeholder="<?php echo t('jour_ph'); ?>" required style="margin-bottom: 1rem; resize: vertical;"></textarea>
                         <button type="submit" class="btn btn-primary" style="width: 100%;"><?php echo t('jour_save'); ?></button>

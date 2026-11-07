@@ -42,8 +42,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         } elseif ($new !== $confirm) {
             $error = t('set_pw_mismatch');
         } else {
+            $new_hash = password_hash($new, PASSWORD_DEFAULT);
             $stmt = $pdo->prepare("UPDATE users SET password_hash = ? WHERE id = ?");
-            $stmt->execute([password_hash($new, PASSWORD_DEFAULT), $user_id]);
+            $stmt->execute([$new_hash, $user_id]);
+            // Keep this device signed in; every other session no longer matches (see db.php).
+            $_SESSION['pw_fp'] = adhd_pw_fingerprint($new_hash);
+            session_regenerate_id(true);
             $message = t('set_pw_changed');
         }
     }

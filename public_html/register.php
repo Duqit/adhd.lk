@@ -42,6 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['user_id'] = $pdo->lastInsertId();
                 $_SESSION['username'] = $username;
                 $_SESSION['role'] = 'user';
+                $_SESSION['pw_fp'] = adhd_pw_fingerprint($hashed_password);
                 header("Location: dashboard");
                 exit;
             } else {

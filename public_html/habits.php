@@ -3,10 +3,14 @@ require_once __DIR__ . '/includes/boot.php';
 adhd_session_start();
 
 $is_logged_in = isset($_SESSION['user_id']);
+// Anti-forgery tokens for the logged-in forms. Never loaded for guests: it starts a
+// session, which would make the page uncacheable.
+if ($is_logged_in) require_once __DIR__ . '/includes/csrf.php';
 $habit_data = [];
 
 if ($is_logged_in) {
     require_once 'db.php';
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') csrf_check(); // every logged-in form carries a token
     $user_id = $_SESSION['user_id'];
     $today = date('Y-m-d');
 
@@ -26,8 +30,8 @@ if ($is_logged_in) {
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         if ($_POST['action'] === 'add_habit') {
-            $name = trim($_POST['habit_name']);
-            $emoji = trim($_POST['habit_emoji']) ?: '✅';
+            $name = trim((string)($_POST['habit_name'] ?? ''));
+            $emoji = trim((string)($_POST['habit_emoji'] ?? '')) ?: '✅';
             $emoji = mb_substr($emoji, 0, 8);
             if (!empty($name)) {
                 $stmt = $pdo->prepare("INSERT INTO habits (user_id, name, emoji) VALUES (?, ?, ?)");
@@ -37,14 +41,14 @@ if ($is_logged_in) {
             exit;
         }
         if ($_POST['action'] === 'delete_habit') {
-            $habit_id = (int)$_POST['habit_id'];
+            $habit_id = (int)($_POST['habit_id'] ?? 0);
             $stmt = $pdo->prepare("DELETE FROM habits WHERE id = ? AND user_id = ?");
             $stmt->execute([$habit_id, $user_id]);
             header("Location: habits");
             exit;
         }
         if ($_POST['action'] === 'check_habit') {
-            $habit_id = (int)$_POST['habit_id'];
+            $habit_id = (int)($_POST['habit_id'] ?? 0);
             // Verify ownership
             $stmt = $pdo->prepare("SELECT id FROM habits WHERE id = ? AND user_id = ?");
             $stmt->execute([$habit_id, $user_id]);
@@ -125,6 +129,7 @@ require_once "includes/header.php";
             <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 1rem;"><?php echo t('hab_add_sub'); ?></p>
             <?php if ($is_logged_in): ?>
                 <form method="POST" action="" class="add-task-form" style="margin-top: 0;">
+                    <?php if ($is_logged_in) echo csrf_field(); ?>
                     <input type="hidden" name="action" value="add_habit">
                     <input type="text" name="habit_emoji" class="add-task-input input-narrow" style="text-align:center;" aria-label="<?php echo t('a11y_habit_emoji'); ?>" placeholder="😀" maxlength="8">
                     <input type="text" name="habit_name" class="add-task-input" aria-label="<?php echo t('hab_name_ph'); ?>" placeholder="<?php echo t('hab_name_ph'); ?>" required maxlength="120">
@@ -160,6 +165,7 @@ require_once "includes/header.php";
                         </div>
                         <div class="habit-actions">
                             <form method="POST" action="" style="margin: 0; flex: 1; display: flex;">
+                                <?php if ($is_logged_in) echo csrf_field(); ?>
                                 <input type="hidden" name="action" value="check_habit">
                                 <input type="hidden" name="habit_id" value="<?php echo $habit['id']; ?>">
                                 <button type="submit" class="habit-check-btn <?php echo $habit['checked_today'] ? 'checked' : ''; ?>" style="flex: 1;">
@@ -167,6 +173,7 @@ require_once "includes/header.php";
                                 </button>
                             </form>
                             <form method="POST" action="" onsubmit="return confirm(<?php echo htmlspecialchars(json_encode(t('js_confirm_del_habit')), ENT_QUOTES); ?>);" style="margin: 0;">
+                                <?php if ($is_logged_in) echo csrf_field(); ?>
                                 <input type="hidden" name="action" value="delete_habit">
                                 <input type="hidden" name="habit_id" value="<?php echo $habit['id']; ?>">
                                 <button type="submit" class="task-del" title="Delete">&times;</button>

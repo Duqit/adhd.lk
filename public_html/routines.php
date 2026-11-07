@@ -3,16 +3,20 @@ require_once __DIR__ . '/includes/boot.php';
 adhd_session_start();
 
 $is_logged_in = isset($_SESSION['user_id']);
+// Anti-forgery tokens for the logged-in forms. Never loaded for guests: it starts a
+// session, which would make the page uncacheable.
+if ($is_logged_in) require_once __DIR__ . '/includes/csrf.php';
 $routine_data = [];
 
 if ($is_logged_in) {
     require_once 'db.php';
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') csrf_check(); // every logged-in form carries a token
     $user_id = $_SESSION['user_id'];
 
     // Handle POST requests
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         if ($_POST['action'] === 'create_routine') {
-            $name = trim($_POST['routine_name']);
+            $name = trim((string)($_POST['routine_name'] ?? ''));
             if (!empty($name)) {
                 $stmt = $pdo->prepare("INSERT INTO routines (user_id, name) VALUES (?, ?)");
                 $stmt->execute([$user_id, $name]);
@@ -20,10 +24,10 @@ if ($is_logged_in) {
 
                 if (isset($_POST['step_title']) && is_array($_POST['step_title'])) {
                     $titles = $_POST['step_title'];
-                    $durations = $_POST['step_duration'];
+                    $durations = (array)($_POST['step_duration'] ?? []);
                     for ($i = 0; $i < count($titles); $i++) {
-                        $title = trim($titles[$i]);
-                        $duration = (int)$durations[$i];
+                        $title = is_string($titles[$i]) ? trim($titles[$i]) : '';
+                        $duration = (int)($durations[$i] ?? 0);
                         if (!empty($title) && $duration > 0) {
                             $stmt = $pdo->prepare("INSERT INTO routine_steps (routine_id, title, duration_minutes, step_order) VALUES (?, ?, ?, ?)");
                             $stmt->execute([$routine_id, $title, $duration, $i + 1]);
@@ -36,7 +40,7 @@ if ($is_logged_in) {
         }
 
         if ($_POST['action'] === 'delete_routine') {
-            $routine_id = (int)$_POST['routine_id'];
+            $routine_id = (int)($_POST['routine_id'] ?? 0);
             $stmt = $pdo->prepare("DELETE FROM routines WHERE id = ? AND user_id = ?");
             $stmt->execute([$routine_id, $user_id]);
             header("Location: routines");
@@ -84,6 +88,7 @@ require_once "includes/header.php";
         <div class="glass-card hidden" id="create-routine-form" style="margin-bottom: 3rem; border: 1px solid var(--accent-primary); width: 100%;">
             <h2 class="h3"><?php echo t('rout_create_title'); ?></h2>
             <form method="POST" action="" id="routine-form">
+                <?php if ($is_logged_in) echo csrf_field(); ?>
                 <input type="hidden" name="action" value="create_routine">
                 <div class="form-group" style="margin-top: 1rem;">
                     <label for="routine-name-input"><?php echo t('rout_name_label'); ?></label>
@@ -129,6 +134,7 @@ require_once "includes/header.php";
                     <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                         <h3><?php echo htmlspecialchars($routine['name']); ?></h3>
                         <form method="POST" action="" onsubmit="return confirm(<?php echo htmlspecialchars(json_encode(t('js_confirm_del_routine')), ENT_QUOTES); ?>);">
+                            <?php if ($is_logged_in) echo csrf_field(); ?>
                             <input type="hidden" name="action" value="delete_routine">
                             <input type="hidden" name="routine_id" value="<?php echo $routine['id']; ?>">
                             <button type="submit" class="icon-btn" style="font-size: 1.5rem;">&times;</button>

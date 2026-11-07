@@ -38,6 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
             $_SESSION['role'] = $user['role'];
+            $_SESSION['pw_fp'] = adhd_pw_fingerprint($user['password_hash']);
             clear_attempts($pdo, $username);
 
             header("Location: dashboard");

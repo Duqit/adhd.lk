@@ -46,6 +46,83 @@ if (!defined('ADHD_BOOT')) {
     @ini_set('display_errors', '0');
     @ini_set('log_errors', '1');
 
+    // --- Error log the site owner can read ---
+    // The host's own PHP log is root-only. If <site home>/app-logs exists (outside
+    // public_html, so never web-reachable), log there instead; rotate at 5 MB.
+    // Without that directory (local development) PHP's default log is used.
+    $adhd_log_dir = dirname(__DIR__, 2) . '/app-logs';
+    if (is_dir($adhd_log_dir) && is_writable($adhd_log_dir)) {
+        $adhd_log = $adhd_log_dir . '/php_errors.log';
+        if (@filesize($adhd_log) > 5 * 1024 * 1024) {
+            @rename($adhd_log, $adhd_log . '.1');
+        }
+        @ini_set('error_log', $adhd_log);
+    }
+    unset($adhd_log_dir, $adhd_log);
+
+    // Published Cloudflare edge ranges (https://www.cloudflare.com/ips/).
+    if (!function_exists('adhd_cloudflare_ranges')) {
+        function adhd_cloudflare_ranges() {
+            return [
+                '173.245.48.0/20', '103.21.244.0/22', '103.22.200.0/22', '103.31.4.0/22',
+                '141.101.64.0/18', '108.162.192.0/18', '190.93.240.0/20', '188.114.96.0/20',
+                '197.234.240.0/22', '198.41.128.0/17', '162.158.0.0/15', '104.16.0.0/13',
+                '104.24.0.0/14', '172.64.0.0/13', '131.0.72.0/22',
+                '2400:cb00::/32', '2606:4700::/32', '2803:f800::/32', '2405:b500::/32',
+                '2405:8100::/32', '2a06:98c0::/29', '2c0f:f248::/32',
+            ];
+        }
+    }
+
+    if (!function_exists('adhd_ip_in_cidr')) {
+        function adhd_ip_in_cidr($ip, $cidr) {
+            list($net, $bits) = explode('/', $cidr);
+            $ip_bin = @inet_pton($ip);
+            $net_bin = @inet_pton($net);
+            if ($ip_bin === false || $net_bin === false || strlen($ip_bin) !== strlen($net_bin)) return false;
+            $bits = (int)$bits;
+            $bytes = intdiv($bits, 8);
+            if (substr($ip_bin, 0, $bytes) !== substr($net_bin, 0, $bytes)) return false;
+            $rem = $bits % 8;
+            if ($rem === 0) return true;
+            $mask = (0xFF << (8 - $rem)) & 0xFF;
+            return (ord($ip_bin[$bytes]) & $mask) === (ord($net_bin[$bytes]) & $mask);
+        }
+    }
+
+    /** True when the connection came from Cloudflare or from a proxy on this machine/LAN. */
+    function adhd_request_via_proxy() {
+        $remote = $_SERVER['REMOTE_ADDR'] ?? '';
+        if (!filter_var($remote, FILTER_VALIDATE_IP)) return false;
+        if (!filter_var($remote, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) return true;
+        foreach (adhd_cloudflare_ranges() as $cidr) {
+            if (adhd_ip_in_cidr($remote, $cidr)) return true;
+        }
+        return false;
+    }
+
+    // --- Requests that bypass Cloudflare ---
+    // Visitors always arrive through Cloudflare; a request straight to the server's IP
+    // skips its protection. For now these are only logged. Once the log shows real
+    // traffic is never flagged, set define('ADHD_CF_ONLY', true) in config.php to refuse them.
+    if (PHP_SAPI !== 'cli' && !adhd_request_via_proxy()) {
+        $cfg = __DIR__ . '/config.php';
+        if (is_file($cfg)) require_once $cfg;
+        if (defined('ADHD_CF_ONLY') && ADHD_CF_ONLY) {
+            http_response_code(403);
+            exit('Forbidden');
+        }
+        error_log('origin-direct: ' . ($_SERVER['REMOTE_ADDR'] ?? '?') . ' '
+            . ($_SERVER['REQUEST_METHOD'] ?? '') . ' ' . substr($_SERVER['REQUEST_URI'] ?? '', 0, 200)
+            . ' ua=' . substr($_SERVER['HTTP_USER_AGENT'] ?? '', 0, 80));
+        unset($cfg);
+    }
+
+    /** What a session stores to prove it was created with the account's current password. */
+    function adhd_pw_fingerprint($password_hash) {
+        return hash('sha256', (string)$password_hash);
+    }
+
     /**
      * Start the session only for visitors who already have one (logged in, or
      * mid-way through a form). Anonymous visitors get no PHPSESSID cookie, so

@@ -71,6 +71,7 @@ $users = $stmt->fetchAll();
             <div class="stat-card"><div class="stat-num"><?php echo $total_users; ?></div><div class="stat-label">Total users</div></div>
             <div class="stat-card"><div class="stat-num"><?php echo $new_week; ?></div><div class="stat-label">New this week</div></div>
             <div class="stat-card"><div class="stat-num"><?php echo $total_admins; ?></div><div class="stat-label">Admins</div></div>
+            <div class="stat-card"><div class="stat-num"><?php echo PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION; ?></div><div class="stat-label">PHP version<?php echo PHP_VERSION_ID < 80300 ? ' — upgrade' : ''; ?></div></div>
         </div>
 
         <?php if ($message): ?><div class="message"><?php echo htmlspecialchars($message); ?></div><?php endif; ?>

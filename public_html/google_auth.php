@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         // Check if user already exists by google_id or email
-        $stmt = $pdo->prepare("SELECT id, username, role, google_id FROM users WHERE google_id = ? OR email = ?");
+        $stmt = $pdo->prepare("SELECT id, username, role, google_id, password_hash FROM users WHERE google_id = ? OR email = ?");
         $stmt->execute([$google_id, $email]);
         $user = $stmt->fetch();
         
@@ -76,6 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
             $_SESSION['role'] = $user['role'];
+            $_SESSION['pw_fp'] = adhd_pw_fingerprint($user['password_hash']);
             $_SESSION['last_name'] = $payload['family_name'] ?? '';
             
             header("Location: dashboard");
@@ -109,6 +110,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['user_id'] = $new_user_id;
                 $_SESSION['username'] = $username;
                 $_SESSION['role'] = 'user'; // default role
+                $_SESSION['pw_fp'] = adhd_pw_fingerprint($hashed_password);
                 $_SESSION['last_name'] = $payload['family_name'] ?? '';
                 
                 header("Location: dashboard");
