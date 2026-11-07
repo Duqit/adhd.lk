@@ -182,6 +182,6 @@ require_once "includes/header.php";
         <button class="btn btn-secondary" id="runner-btn-quit" style="margin-top: 2rem; background: transparent; border: 1px solid var(--bg-glass-border); color: var(--text-secondary);"><?php echo t('rout_quit'); ?></button>
     </div>
 
-    <script src="/js/routines.js?v=20260828a"></script>
+    <script src="/js/routines.js?v=20261108a"></script>
     <?php if (!$is_logged_in): ?><script src="/js/routines-guest.js?v=20260828a"></script><?php endif; ?>
     <?php require_once 'includes/footer.php'; ?>

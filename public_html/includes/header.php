@@ -111,7 +111,7 @@ function nav_active($page, $current) {
 
     <!-- Inter is served from this site (assets/fonts, SIL OFL) — no request to Google Fonts. -->
     <link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/css/style.css?v=20261108a">
+    <link rel="stylesheet" href="/css/style.css?v=20261108b">
 
     <!-- PWA Meta Tags -->
     <link rel="manifest" href="/manifest.json">
