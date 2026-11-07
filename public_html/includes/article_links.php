@@ -25,3 +25,14 @@ function normalize_article_links($html, $pdo, &$unknown = null) {
             return 'href="/article/' . $row['id'] . '-' . $row['slug'] . $m[2] . '"';
         }, $html);
 }
+
+// The <title> an article page uses. meta_title (admin "SEO title") wins: it keeps English
+// search terms on si/ta pages and is never sent through the Gemini rewrite, so a polish
+// can't drop them. Shared by article.php and the CMS length warning.
+function article_page_title(array $a) {
+    if (!empty($a['meta_title'])) return $a['meta_title'];
+    return mb_strlen($a['title']) <= 58 ? $a['title'] . ' | ADHD.lk' : $a['title'];
+}
+
+// Google shows roughly the first 60 characters of a title in results.
+define('ARTICLE_TITLE_MAX', 60);

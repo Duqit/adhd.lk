@@ -5,6 +5,7 @@ require_once __DIR__ . '/includes/boot.php';
 adhd_session_start();
 require_once 'includes/i18n.php';
 require_once 'db.php';
+require_once 'includes/article_links.php';
 
 $is_logged_in = isset($_SESSION['user_id']);
 $user_id = $is_logged_in ? $_SESSION['user_id'] : null;
@@ -123,13 +124,7 @@ $updated_ts = !empty($article['updated_at']) ? strtotime($article['updated_at'])
 $reading_mins = max(1, (int)round(str_word_count(strip_tags($article['content'])) / 200));
 
 // SEO variables consumed by header.php
-// meta_title (admin "SEO title") wins: it keeps English search terms on si/ta pages
-// and is never sent through the Gemini rewrite, so a polish can't drop them.
-if (!empty($article['meta_title'])) {
-    $page_title = $article['meta_title'];
-} else {
-    $page_title = mb_strlen($article['title']) <= 58 ? $article['title'] . ' | ADHD.lk' : $article['title'];
-}
+$page_title = article_page_title($article);
 $author_name = (empty($article['author']) || $article['author'] === 'ADHD.lk Team') ? 'Nishnath Thaweesha' : $article['author'];
 $page_desc = mb_substr(trim(strip_tags($article['excerpt'] ?: $article['content'])), 0, 158);
 $page_canonical = $art_url;

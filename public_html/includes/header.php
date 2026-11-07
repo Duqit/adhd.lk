@@ -94,20 +94,12 @@ function nav_active($page, $current) {
     </script>
     <?php endif; ?>
     <?php if (isset($page_jsonld)) { echo $page_jsonld; } ?>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Google Tag Manager + Google tag (gtag.js) — skipped when the browser sends
-         Do Not Track or Global Privacy Control, as the privacy policy promises. -->
+    <!-- Google Analytics 4 (gtag.js) — skipped when the browser sends Do Not Track
+         or Global Privacy Control, as the privacy policy promises. -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       if (!(navigator.doNotTrack === '1' || window.doNotTrack === '1' || navigator.globalPrivacyControl === true)) {
-        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','GTM-M8GBPL3W');
-
         var g = document.createElement('script');
         g.async = true;
         g.src = 'https://www.googletagmanager.com/gtag/js?id=G-5NBM71X3E6';
@@ -116,10 +108,10 @@ function nav_active($page, $current) {
         gtag('config', 'G-5NBM71X3E6');
       }
     </script>
-    <!-- End Google Tag Manager -->
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css?v=20261011a">
+    <!-- Inter is served from this site (assets/fonts, SIL OFL) — no request to Google Fonts. -->
+    <link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/css/style.css?v=20261108a">
 
     <!-- PWA Meta Tags -->
     <link rel="manifest" href="/manifest.json">
@@ -144,10 +136,6 @@ function nav_active($page, $current) {
     </script>
 </head>
 <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M8GBPL3W"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
     <header class="navbar" id="navbar">
         <a href="/" class="logo">ADHD.lk<?php echo $is_admin ? ' <span style="font-size: 0.9rem; color: var(--accent-secondary);">Admin</span>' : ''; ?></a>
         <nav class="nav-links" id="nav-links">

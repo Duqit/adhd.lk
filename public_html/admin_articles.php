@@ -228,14 +228,14 @@ try {
     $params = [];
     if ($f_lang !== '') { $where[] = 'lang = ?'; $params[] = $f_lang; }
     if ($f_needs) { $where[] = 'polished_at IS NULL'; }
-    $stmt = $pdo->prepare("SELECT id, title, author, tags, lang, slug, created_at, polished_at FROM articles"
+    $stmt = $pdo->prepare("SELECT id, title, meta_title, author, tags, lang, slug, created_at, polished_at FROM articles"
         . ($where ? ' WHERE ' . implode(' AND ', $where) : '') . " ORDER BY created_at DESC, id DESC");
     $stmt->execute($params);
     $articles = $stmt->fetchAll();
     $progress = $pdo->query("SELECT lang, COUNT(*) AS total, SUM(polished_at IS NOT NULL) AS done FROM articles GROUP BY lang")->fetchAll();
 } catch (Throwable $e) {
     $has_polish = false;
-    $stmt = $pdo->prepare("SELECT id, title, author, tags, lang, slug, created_at FROM articles"
+    $stmt = $pdo->prepare("SELECT id, title, meta_title, author, tags, lang, slug, created_at FROM articles"
         . ($f_lang !== '' ? ' WHERE lang = ?' : '') . " ORDER BY created_at DESC, id DESC");
     $stmt->execute($f_lang !== '' ? [$f_lang] : []);
     $articles = $stmt->fetchAll();
@@ -329,6 +329,7 @@ try {
                 <div class="form-group">
                     <label>SEO title <span style="color: var(--text-secondary); font-weight: 400;">(optional — the browser tab / Google title; not sent to Gemini, so a rewrite never changes it. Keep English search words here, e.g. "What is ADHD in Sinhala?")</span></label>
                     <input type="text" name="meta_title" class="form-control" maxlength="255" value="<?php echo htmlspecialchars($editing['meta_title'] ?? ''); ?>" placeholder="Leave empty to use the Title">
+                    <div id="title-length" style="font-size: 0.85rem; margin-top: 0.4rem; color: var(--text-secondary);" aria-live="polite"></div>
                 </div>
 
                 <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
@@ -421,6 +422,9 @@ try {
                             </a>
                             <?php if (!empty($article['polished_at'])): ?>
                                 <span class="badge lang" title="Rewritten with Gemini on <?php echo date('M d, Y', strtotime($article['polished_at'])); ?>" style="margin-left: 0.35rem; text-transform: none;">✨ polished</span>
+                            <?php endif; ?>
+                            <?php $title_len = mb_strlen(article_page_title($article)); if ($title_len > ARTICLE_TITLE_MAX): ?>
+                                <span class="badge" title="Page title is <?php echo $title_len; ?> characters — Google shows about <?php echo ARTICLE_TITLE_MAX; ?>. Set a shorter SEO title." style="margin-left: 0.35rem; text-transform: none; background: rgba(251, 191, 36, 0.15); color: var(--color-warn);">✂ title <?php echo $title_len; ?></span>
                             <?php endif; ?>
                         </td>
                         <td><span class="badge lang"><?php echo htmlspecialchars($article['lang'] ?: 'en'); ?></span></td>
@@ -558,4 +562,24 @@ try {
 })();
 </script>
 <?php endif; ?>
+<script>
+// Live length of the <title> this article will get (same rule as article_page_title()).
+(function () {
+    var out = document.getElementById('title-length');
+    var form = out && out.closest('form');
+    if (!form) return;
+    var title = form.querySelector('[name="title"]');
+    var meta = form.querySelector('[name="meta_title"]');
+    var MAX = <?php echo ARTICLE_TITLE_MAX; ?>;
+    function update() {
+        var t = meta.value.trim() || (Array.from(title.value).length <= 58 ? title.value + ' | ADHD.lk' : title.value);
+        var n = Array.from(t).length;
+        out.textContent = 'Page title: ' + n + ' characters' + (n > MAX ? ' — Google shows about ' + MAX + '; shorten it here.' : ' ✓');
+        out.style.color = n > MAX ? 'var(--color-warn)' : 'var(--text-secondary)';
+    }
+    title.addEventListener('input', update);
+    meta.addEventListener('input', update);
+    update();
+})();
+</script>
 <?php require_once 'includes/footer.php'; ?>

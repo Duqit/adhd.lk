@@ -469,7 +469,7 @@ return [
                  <p style="margin-top:.75rem;">Your theme choice (dark or light) is stored in localStorage, not a cookie.</p>'],
 
         ['h' => 'Analytics',
-         'b' => '<p>We use <strong>Google Analytics 4</strong> and <strong>Google Tag Manager</strong> on every page to understand which tools people use and where visitors come from. Google receives your IP address, browser and device information, and the pages you view, and sets its own cookies.</p>
+         'b' => '<p>We use <strong>Google Analytics 4</strong> on every page to understand which tools people use and where visitors come from. Google receives your IP address, browser and device information, and the pages you view, and sets its own cookies.</p>
                  <p style="margin-top:.75rem;">We use this only in aggregate, to decide what to build next. We do not sell data, run advertising, or use it to identify individuals. You can block it with any standard ad/tracker blocker or your browser\'s "Do Not Track"/privacy settings, and the site will keep working normally.</p>'],
 
         ['h' => 'Signing in with Google',

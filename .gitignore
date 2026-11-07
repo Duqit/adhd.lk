@@ -3,6 +3,10 @@ public_html/includes/config.php
 public_html/includes/mail_config.php
 .env
 
+# --- Local deploy/test helpers (server alias, paths) ---
+.deploy/
+app-logs/
+
 # --- Server leftovers that are not part of the project ---
 logs/
 mail.adhd.lk/

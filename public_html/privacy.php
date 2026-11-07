@@ -9,7 +9,7 @@ require_once "includes/header.php";
     <div style="width: 100%;">
         <h1><?php echo t('priv_title'); ?></h1>
         <p style="color: var(--text-faint); font-size: 0.9rem; margin-bottom: 2rem;">
-            <?php echo t('legal_updated'); ?>: 16 July 2026
+            <?php echo t('legal_updated'); ?>: 8 November 2026
         </p>
 
         <?php foreach (t_arr('priv_sections') as $s): ?>
