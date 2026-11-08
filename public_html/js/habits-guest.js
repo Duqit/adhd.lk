@@ -73,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const cur = all[h.id] || [];
                 if (cur.includes(today)) {
                     all[h.id] = cur.filter(d => d !== today);
+                    Store.addXP(-5);
                 } else {
                     cur.push(today);
                     all[h.id] = cur;

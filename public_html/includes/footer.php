@@ -37,7 +37,7 @@
             <p class="footer-credit"><?php echo sprintf(t('footer_developed_by'), '<a href="https://duqit.com" rel="noopener">Duqit Labs</a>'); ?> · <a href="https://github.com/duqit/adhd.lk" rel="noopener"><?php echo t('footer_open_source'); ?></a></p>
         </div>
     </footer>
-    <script src="/js/store.js?v=20260828a"></script>
+    <script src="/js/store.js?v=20261108b"></script>
     <script src="/js/global.js?v=20260828a"></script>
 </body>
 </html>

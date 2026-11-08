@@ -12,26 +12,10 @@ if ($is_logged_in) require_once __DIR__ . '/includes/csrf.php';
 // ---------------------------------------------------------
 if ($is_logged_in) {
     require_once 'db.php';
+    require_once __DIR__ . '/includes/xp.php';
     if ($_SERVER['REQUEST_METHOD'] === 'POST') csrf_check(); // every logged-in form carries a token
     $user_id = $_SESSION['user_id'];
     $today = date('Y-m-d');
-
-    function addXP($pdo, $user_id, $amount) {
-        $stmt = $pdo->prepare("SELECT xp, level FROM users WHERE id = ?");
-        $stmt->execute([$user_id]);
-        $user = $stmt->fetch();
-        if ($user) {
-            $new_xp = $user['xp'] + $amount;
-            $level = $user['level'];
-            $xp_needed = $level * 100;
-            if ($new_xp >= $xp_needed) {
-                $level++;
-                $new_xp -= $xp_needed;
-            }
-            $stmt = $pdo->prepare("UPDATE users SET xp = ?, level = ? WHERE id = ?");
-            $stmt->execute([$new_xp, $level, $user_id]);
-        }
-    }
 
     // Add new Top 3 Task
     if (isset($_POST['action']) && $_POST['action'] === 'add_task') {
@@ -59,9 +43,8 @@ if ($is_logged_in) {
             $new_status = $task['is_completed'] ? 0 : 1;
             $stmt = $pdo->prepare("UPDATE tasks SET is_completed = ? WHERE id = ?");
             $stmt->execute([$new_status, $task_id]);
-            if ($new_status == 1) {
-                addXP($pdo, $user_id, 10);
-            }
+            // XP follows the checkbox both ways: un-ticking takes the 10 back.
+            adhd_award_xp($pdo, $user_id, $new_status == 1 ? 10 : -10);
         }
         header("Location: dashboard");
         exit;
@@ -82,7 +65,7 @@ if ($is_logged_in) {
         $note = trim((string)($_POST['note'] ?? ''));
         $stmt = $pdo->prepare("INSERT INTO moods (user_id, mood_score, note) VALUES (?, ?, ?)");
         $stmt->execute([$user_id, $mood_score, $note]);
-        addXP($pdo, $user_id, 5);
+        adhd_award_xp($pdo, $user_id, 5);
         header("Location: dashboard");
         exit;
     }
@@ -324,5 +307,5 @@ require_once "includes/header.php";
         </div>
     </main>
 
-    <script src="/js/dashboard-guest.js?v=20261108a"></script>
+    <script src="/js/dashboard-guest.js?v=20261108b"></script>
     <?php require_once 'includes/footer.php'; ?>
