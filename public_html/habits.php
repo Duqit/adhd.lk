@@ -10,23 +10,10 @@ $habit_data = [];
 
 if ($is_logged_in) {
     require_once 'db.php';
+    require_once __DIR__ . '/includes/xp.php';
     if ($_SERVER['REQUEST_METHOD'] === 'POST') csrf_check(); // every logged-in form carries a token
     $user_id = $_SESSION['user_id'];
     $today = date('Y-m-d');
-
-    function habits_addXP($pdo, $user_id, $amount) {
-        $stmt = $pdo->prepare("SELECT xp, level FROM users WHERE id = ?");
-        $stmt->execute([$user_id]);
-        $user = $stmt->fetch();
-        if ($user) {
-            $new_xp = $user['xp'] + $amount;
-            $level = $user['level'];
-            $xp_needed = $level * 100;
-            if ($new_xp >= $xp_needed) { $level++; $new_xp -= $xp_needed; }
-            $stmt = $pdo->prepare("UPDATE users SET xp = ?, level = ? WHERE id = ?");
-            $stmt->execute([$new_xp, $level, $user_id]);
-        }
-    }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         if ($_POST['action'] === 'add_habit') {
@@ -59,10 +46,12 @@ if ($is_logged_in) {
                 if ($existing) {
                     $stmt = $pdo->prepare("DELETE FROM habit_logs WHERE id = ?");
                     $stmt->execute([$existing['id']]);
+                    // Un-checking takes the 5 XP back, so the day pays at most once.
+                    adhd_award_xp($pdo, $user_id, -5);
                 } else {
                     $stmt = $pdo->prepare("INSERT INTO habit_logs (habit_id, user_id, log_date) VALUES (?, ?, ?)");
                     $stmt->execute([$habit_id, $user_id, $today]);
-                    habits_addXP($pdo, $user_id, 5);
+                    adhd_award_xp($pdo, $user_id, 5);
                 }
             }
             header("Location: habits");
@@ -193,5 +182,5 @@ require_once "includes/header.php";
         </div>
     </main>
 
-    <?php if (!$is_logged_in): ?><script src="/js/habits-guest.js?v=20260828a"></script><?php endif; ?>
+    <?php if (!$is_logged_in): ?><script src="/js/habits-guest.js?v=20261108b"></script><?php endif; ?>
     <?php require_once 'includes/footer.php'; ?>

@@ -79,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     item.done = !item.done;
                     Store.set(K.tasks, all);
                     if (item.done) Store.addXP(10);
+                    else Store.addXP(-10);
                     renderTasks(); renderStats();
                 }
             });

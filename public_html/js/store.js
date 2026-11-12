@@ -53,13 +53,18 @@ window.Store = window.Store || {
     addXP(amount) {
         const s = this.getStats();
         s.xp += amount;
-        const needed = s.level * 100;
-        if (s.xp >= needed) {
+        if (s.xp >= s.level * 100) {
+            s.xp -= s.level * 100;
             s.level++;
-            s.xp -= needed;
         }
+        // Negative amounts come from un-ticking: walk levels back, never below zero.
+        while (s.xp < 0 && s.level > 1) {
+            s.level--;
+            s.xp += s.level * 100;
+        }
+        if (s.xp < 0) s.xp = 0;
         this.set(this.KEYS.stats, s);
-        this.toast('+' + amount + ' XP');
+        this.toast((amount > 0 ? '+' : '') + amount + ' XP');
         return s;
     },
 
