@@ -34,7 +34,7 @@
         </div>
         <div class="footer-bottom">
             <p>&copy; <?php echo date('Y'); ?> <?php echo t('footer_copyright'); ?></p>
-            <p class="footer-credit"><?php echo sprintf(t('footer_developed_by'), '<a href="https://duqit.com" rel="noopener">Duqit Labs</a>'); ?> · <a href="https://github.com/duqit/adhd.lk" rel="noopener"><?php echo t('footer_open_source'); ?></a></p>
+            <p class="footer-credit"><?php echo sprintf(t('footer_developed_by'), '<a href="https://duqit.com/solutions/web-design" rel="noopener">Duqit Labs</a>'); ?> · <a href="https://github.com/duqit/adhd.lk" rel="noopener"><?php echo t('footer_open_source'); ?></a></p>
         </div>
     </footer>
     <script src="/js/store.js?v=20260828a"></script>

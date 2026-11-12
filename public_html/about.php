@@ -52,7 +52,7 @@ $sections = [
     ],
     [
         'h' => 'Open source',
-        'b' => '<p>The complete source code of ADHD.lk is public on <a href="https://github.com/duqit/adhd.lk" rel="noopener">GitHub</a>, developed by <a href="https://duqit.com" rel="noopener">Duqit Labs</a>. Anyone can check exactly how the tools work and what happens to your data, and anyone can help: fix a bug, improve a Sinhala or Tamil translation, or report something that is wrong.</p>
+        'b' => '<p>The complete source code of ADHD.lk is public on <a href="https://github.com/duqit/adhd.lk" rel="noopener">GitHub</a>, developed by <a href="https://duqit.com/solutions/web-design" rel="noopener">Duqit Labs</a>. Anyone can check exactly how the tools work and what happens to your data, and anyone can help: fix a bug, improve a Sinhala or Tamil translation, or report something that is wrong.</p>
                 <p>The code is free under the GNU AGPL-3.0 licence and the written content under Creative Commons BY-SA 4.0, so it can be reused and translated as long as it stays open.</p>',
     ],
     [
