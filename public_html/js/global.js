@@ -109,6 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
             date: new Date().toISOString()
         });
         localStorage.setItem('brain_dumps', JSON.stringify(dumps));
+        if (window.adhdTrack) adhdTrack('brain_dump_save'); // never the text
 
         feedback.classList.remove('hidden');
         dumpText.value = '';
@@ -185,6 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
             stopBreathing();
         } else {
             isBreathing = true;
+            if (window.adhdTrack) adhdTrack('breathing_start', { pattern: 'quick_478' });
             startBreathBtn.textContent = TJ('js_breath_stop', 'Stop');
             runBreathingCycle();
         }

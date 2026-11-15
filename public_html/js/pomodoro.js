@@ -235,6 +235,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function startTimer() {
         if (isRunning) return;
+        const fresh = currentMode === 'stopwatch' ? stopwatchBase === 0 : (remaining <= 0 || remaining === totalTime);
+        if (fresh && window.adhdTrack) adhdTrack(currentMode === 'shortBreak' ? 'break_start' : 'focus_start', { mode: currentMode });
         maybeRequestNotifyPermission();
 
         if (intentionInput.value.trim() === '' && FOCUS_MODES.includes(currentMode)) {
@@ -297,6 +299,8 @@ document.addEventListener('DOMContentLoaded', () => {
             switchMode(lastFocusMode, true);
         } else {
             recordSession(Math.round(totalTime / 60));
+            if (window.adhdTrack) adhdTrack('focus_complete', { mode: currentMode, minutes: Math.round(totalTime / 60) });
+            if (window.Store && Store.promptSignup) Store.promptSignup('focus', 2600);
             notify('ADHD.lk', TJ('js_session_done', 'Focus session complete! Take a break 🎉'));
             if (window.Store) Store.toast(TJ('js_session_done', 'Focus session complete! Take a break 🎉'));
             lastFocusMode = currentMode;

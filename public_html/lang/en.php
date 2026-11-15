@@ -39,6 +39,12 @@ return [
     'a11y_skip' => 'Skip to content',
     'a11y_habit_emoji' => 'Emoji for this habit',
     'a11y_task_done' => 'Done',
+    'prompt_focus_t' => 'Focus session done 🎉',
+    'prompt_streak_t' => '3-day streak — nice! 🔥',
+    'prompt_journal_t' => '3 journal entries 📔',
+    'prompt_body' => 'Right now your progress is saved only in this browser. A free account keeps it safe if you clear your browser or switch phones, and everything so far moves across automatically.',
+    'prompt_cta' => 'Create free account',
+    'prompt_dismiss' => 'Not now',
 
     /* ---- Homepage ---- */
     'home_chip' => '✦ Free · No login needed',

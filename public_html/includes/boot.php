@@ -118,6 +118,24 @@ if (!defined('ADHD_BOOT')) {
         unset($cfg);
     }
 
+    /**
+     * Analytics events raised on the server (sign-up, login, sign-up errors). They ride
+     * in the session and header.php hands them to gtag on the next page render. Params
+     * must never contain personal data or anything the visitor typed.
+     */
+    function adhd_queue_event($name, array $params = []) {
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            $_SESSION['ga_events'][] = [$name, $params];
+        }
+    }
+
+    function adhd_take_events() {
+        if (session_status() !== PHP_SESSION_ACTIVE || empty($_SESSION['ga_events'])) return [];
+        $events = $_SESSION['ga_events'];
+        unset($_SESSION['ga_events']);
+        return $events;
+    }
+
     /** What a session stores to prove it was created with the account's current password. */
     function adhd_pw_fingerprint($password_hash) {
         return hash('sha256', (string)$password_hash);

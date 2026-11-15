@@ -122,6 +122,7 @@ require_once "includes/header.php";
         startBtn.addEventListener('click', () => {
             if (running) { stop(); return; }
             running = true;
+            if (window.adhdTrack) adhdTrack('breathing_start', { pattern: pattern });
             startBtn.textContent = L.stop;
             runPhase(0);
         });
@@ -133,6 +134,7 @@ require_once "includes/header.php";
             c.closest('.task-item').classList.toggle('completed', c.checked);
             const allDone = Array.from(checks).every(x => x.checked);
             doneMsg.classList.toggle('hidden', !allDone);
+            if (allDone && window.adhdTrack) adhdTrack('grounding_complete');
         }));
         document.getElementById('ground-reset').addEventListener('click', () => {
             checks.forEach(c => { c.checked = false; c.closest('.task-item').classList.remove('completed'); });

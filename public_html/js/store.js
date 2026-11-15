@@ -83,6 +83,78 @@ window.Store = window.Store || {
         this._toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
     },
 
+    /* --- Sign-up prompt at moments of progress (guests only) ---
+       Shown after a finished focus session, a 3-day habit streak or the third journal
+       entry. Gentle by design: each trigger at most once, at least 2 days between
+       prompts, none for 14 days after "Not now", and it never takes keyboard focus. */
+    promptSignup(trigger, delayMs) {
+        if (window.ADHD_USER) return;
+        const KEY = 'adhd_signup_prompt';
+        const DAY = 864e5, now = Date.now();
+        const st = this.get(KEY, {});
+        st.shown = st.shown || {};
+        if (st.shown[trigger]) return;
+        if (st.dismissedAt && now - st.dismissedAt < 14 * DAY) return;
+        if (st.lastShownAt && now - st.lastShownAt < 2 * DAY) return;
+        if (document.getElementById('signup-prompt')) return;
+
+        const T = (k, fb) => (window.ADHD_I18N && window.ADHD_I18N[k]) || fb;
+        const titles = {
+            focus: T('prompt_focus_t', 'Focus session done 🎉'),
+            streak: T('prompt_streak_t', '3-day streak — nice! 🔥'),
+            journal: T('prompt_journal_t', '3 journal entries 📔')
+        };
+
+        setTimeout(() => {
+            if (document.getElementById('signup-prompt')) return;
+            const box = document.createElement('div');
+            box.id = 'signup-prompt';
+            box.className = 'signup-prompt';
+            box.setAttribute('role', 'region');
+            box.setAttribute('aria-live', 'polite');
+            box.setAttribute('aria-label', titles[trigger] || titles.focus);
+
+            const h = document.createElement('p');
+            h.className = 'signup-prompt-title';
+            h.textContent = titles[trigger] || titles.focus;
+            const p = document.createElement('p');
+            p.className = 'signup-prompt-body';
+            p.textContent = T('prompt_body', 'Right now your progress is saved only in this browser. A free account keeps it safe if you clear your browser or switch phones, and everything so far moves across automatically.');
+            const actions = document.createElement('div');
+            actions.className = 'signup-prompt-actions';
+            const cta = document.createElement('a');
+            cta.className = 'btn btn-primary';
+            cta.href = '/register';
+            cta.setAttribute('data-cta', 'prompt_' + trigger);
+            cta.textContent = T('prompt_cta', 'Create free account');
+            const later = document.createElement('button');
+            later.type = 'button';
+            later.className = 'btn btn-secondary';
+            later.textContent = T('prompt_dismiss', 'Not now');
+            actions.append(cta, later);
+            box.append(h, p, actions);
+            document.body.appendChild(box);
+            requestAnimationFrame(() => box.classList.add('show'));
+
+            const close = () => {
+                const s = this.get(KEY, {});
+                s.dismissedAt = Date.now();
+                this.set(KEY, s);
+                if (window.adhdTrack) adhdTrack('signup_prompt_dismiss', { trigger: trigger });
+                box.remove();
+                document.removeEventListener('keydown', onKey);
+            };
+            const onKey = e => { if (e.key === 'Escape') close(); };
+            later.addEventListener('click', close);
+            document.addEventListener('keydown', onKey);
+
+            st.shown[trigger] = Date.now();
+            st.lastShownAt = Date.now();
+            this.set(KEY, st);
+            if (window.adhdTrack) adhdTrack('signup_prompt_shown', { trigger: trigger });
+        }, delayMs || 0);
+    },
+
     /* --- One-time import of guest data after signup/login --- */
     hasLocalData() {
         const K = this.KEYS;

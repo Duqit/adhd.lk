@@ -77,6 +77,7 @@ window.startRoutine = function(routineData) {
         return;
     }
     
+    if (window.adhdTrack) adhdTrack('routine_start', { steps: routineData.steps.length });
     currentRoutine = routineData;
     currentStepIndex = 0;
     isPaused = false;
@@ -154,6 +155,7 @@ function finishRoutine() {
     
     // Confetti or play sound
     playAudioNotification('stop');
+    if (window.adhdTrack) adhdTrack('routine_complete');
     
     btnSkip.onclick = () => {
         window.location.reload();

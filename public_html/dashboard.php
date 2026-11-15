@@ -307,5 +307,5 @@ require_once "includes/header.php";
         </div>
     </main>
 
-    <script src="/js/dashboard-guest.js?v=20261108b"></script>
+    <script src="/js/dashboard-guest.js?v=20261116a"></script>
     <?php require_once 'includes/footer.php'; ?>

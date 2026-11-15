@@ -84,6 +84,15 @@ function verify_recaptcha($token) {
     }
 
     $result = json_decode($response);
-    return ($result && isset($result->success) && $result->success && isset($result->score) && $result->score >= 0.5);
+    $ok = ($result && isset($result->success) && $result->success && isset($result->score) && $result->score >= 0.5);
+    if (!$ok) {
+        // Record why a real person may have been turned away (no personal data), so the
+        // 0.5 threshold can be judged from app-logs/php_errors.log.
+        error_log(sprintf('recaptcha rejected: page=%s success=%s score=%s action=%s errors=%s',
+            strtok($_SERVER['REQUEST_URI'] ?? '?', '?'),
+            json_encode($result->success ?? null), json_encode($result->score ?? null),
+            json_encode($result->action ?? null), json_encode($result->{'error-codes'} ?? [])));
+    }
+    return $ok;
 }
 ?>

@@ -182,5 +182,5 @@ require_once "includes/header.php";
         </div>
     </main>
 
-    <?php if (!$is_logged_in): ?><script src="/js/habits-guest.js?v=20261108b"></script><?php endif; ?>
+    <?php if (!$is_logged_in): ?><script src="/js/habits-guest.js?v=20261116a"></script><?php endif; ?>
     <?php require_once 'includes/footer.php'; ?>

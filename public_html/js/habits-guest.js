@@ -78,6 +78,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     cur.push(today);
                     all[h.id] = cur;
                     Store.addXP(5);
+                    const streakNow = streakOf(cur);
+                    if (window.adhdTrack) adhdTrack('habit_check', { streak: streakNow });
+                    if (streakNow >= 3 && Store.promptSignup) Store.promptSignup('streak', 900);
                 }
                 Store.set(K.habitLogs, all);
                 render();
@@ -105,6 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const habits = Store.get(K.habits, []);
             habits.push({ id: Store.uid(), name: name, emoji: emoji, created: today });
             Store.set(K.habits, habits);
+            if (window.adhdTrack) adhdTrack('habit_add');
             form.reset();
             render();
         });
