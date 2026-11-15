@@ -1,0 +1,71 @@
+<!doctype html>
+<!--
+  Source of public_html/assets/og-image.png (1200x630), the link-preview image
+  used by adhd.lk pages and the GitHub repo's social preview.
+
+  Regenerate (Windows, Git Bash) from the repo root:
+    "/c/Program Files/Google/Chrome/Application/chrome.exe" --headless=new \
+      --hide-scrollbars --window-size=1200,630 --force-device-scale-factor=1 \
+      --screenshot="$(cygpath -w public_html/assets/og-image.png)" \
+      "file:///$(cygpath -m docs/og-image.html)"
+  Then bump nothing (images are not versioned), deploy, and re-upload it under
+  GitHub Settings -> Social preview if that should change too.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ADHD.lk link preview</title>
+<style>
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 400 800;
+    src: url('../public_html/assets/fonts/inter-latin.woff2') format('woff2');
+  }
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    position: relative;
+    font-family: 'Inter', sans-serif;
+    color: #f1f5f9;
+    background:
+      radial-gradient(circle at 240px 40px, rgba(99, 102, 241, 0.42), transparent 400px),
+      radial-gradient(circle at 900px 70px, rgba(139, 92, 246, 0.22), transparent 300px),
+      radial-gradient(circle at 1010px 520px, rgba(34, 211, 238, 0.26), transparent 380px),
+      #0b1120;
+  }
+  .card {
+    position: absolute; inset: 0 0 10px 0;
+    padding: 0 80px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .logo {
+    font-size: 64px; font-weight: 800; letter-spacing: -0.5px; line-height: 1;
+    background: linear-gradient(135deg, #818cf8 0%, #a78bfa 60%, #67e8f9 140%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+    align-self: flex-start;
+    padding-bottom: 6px;
+  }
+  h1 {
+    margin: 56px 0 0;
+    font-size: 62px; font-weight: 800; line-height: 1.18; letter-spacing: -1px;
+  }
+  p {
+    margin: 40px 0 0;
+    font-size: 28px; font-weight: 400; line-height: 1.6;
+    color: #a3b2c6;
+  }
+  .bar {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 10px;
+    background: linear-gradient(90deg, #6366f1, #22d3ee);
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">ADHD.lk</div>
+    <h1>Tools that work the way<br>your ADHD brain does.</h1>
+    <p>Focus timer · Daily planner · Habit streaks · Routines · Journal<br>Free ADHD self-test (ASRS v1.1) — private, 5 minutes</p>
+  </div>
+  <div class="bar"></div>
+</body>
+</html>

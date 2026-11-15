@@ -144,7 +144,7 @@ $page_jsonld = '<script type="application/ld+json">' . json_encode([
     'datePublished' => $published,
     'dateModified' => date('c', $updated_ts),
     'mainEntityOfPage' => $art_url,
-    'image' => $article['image_url'] ?: 'https://adhd.lk/assets/og-image.png',
+    'image' => $article['image_url'] ?: 'https://adhd.lk/assets/og-image.png?v=20261116',
     'author' => ['@type' => 'Person', 'name' => $author_name, 'url' => 'https://adhd.lk/about'],
     'publisher' => ['@type' => 'Organization', 'name' => 'ADHD.lk', 'url' => 'https://adhd.lk/', 'logo' => ['@type' => 'ImageObject', 'url' => 'https://adhd.lk/assets/icon-512.svg']]
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . '</script>';

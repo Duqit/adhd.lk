@@ -13,7 +13,7 @@ $page_desc = isset($page_desc) ? $page_desc : t('meta_default');
 $request_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 if ($request_path === '/index') { $request_path = '/'; }
 $page_canonical = isset($page_canonical) ? $page_canonical : ('https://adhd.lk' . $request_path);
-$page_og_image = isset($page_og_image) ? $page_og_image : 'https://adhd.lk/assets/og-image.png';
+$page_og_image = isset($page_og_image) ? $page_og_image : 'https://adhd.lk/assets/og-image.png?v=20261116';
 $skip_hreflang = isset($skip_hreflang) ? $skip_hreflang : false;
 $page_lang = isset($page_lang) ? $page_lang : current_lang();
 
