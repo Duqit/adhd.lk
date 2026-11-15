@@ -79,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
         routines.unshift({ id: Store.uid(), name: name, steps: steps });
         Store.set(K.routines, routines);
         Store.toast(TJ('js_routine_saved', 'Routine saved ✔'));
+        if (window.adhdTrack) adhdTrack('routine_create', { steps: steps.length });
         render();
     }
 

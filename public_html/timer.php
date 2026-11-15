@@ -118,6 +118,6 @@ require_once "includes/header.php";
         </div>
     </div>
 
-    <script src="/js/pomodoro.js?v=20260828a"></script>
-    <script src="/js/ambient.js?v=20260828a"></script>
+    <script src="/js/pomodoro.js?v=20261115a"></script>
+    <script src="/js/ambient.js?v=20261115a"></script>
 <?php require_once 'includes/footer.php'; ?>

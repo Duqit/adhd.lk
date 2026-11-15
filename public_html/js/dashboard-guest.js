@@ -79,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     item.done = !item.done;
                     Store.set(K.tasks, all);
                     if (item.done) Store.addXP(10);
+                    if (item.done && window.adhdTrack) adhdTrack('task_complete');
                     renderTasks(); renderStats();
                 }
             });
@@ -105,6 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const all = Store.get(K.tasks, []);
             all.push({ id: Store.uid(), title: title, est: estEl.value || null, done: false, date: today });
             Store.set(K.tasks, all);
+            if (window.adhdTrack) adhdTrack('task_add');
             titleEl.value = ''; estEl.value = '';
             renderTasks();
         });
@@ -146,6 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
             moods.push({ score: selectedMood, note: document.getElementById('g-mood-note-input').value.trim(), date: today });
             Store.set(K.moods, moods);
             Store.addXP(5);
+            if (window.adhdTrack) adhdTrack('mood_checkin');
             renderMood(); renderStats();
         });
         renderMood();

@@ -107,11 +107,26 @@ function nav_active($page, $current) {
         gtag('js', new Date());
         gtag('config', 'G-5NBM71X3E6');
       }
+
+      // Usage events: which tools get used and where sign-ups come from. Never personal
+      // data, never anything typed. Under DNT/GPC gtag.js isn't loaded, so these stay in
+      // the page's dataLayer and are never sent.
+      window.adhdTrack = function (name, params) {
+        try { gtag('event', name, params || {}); } catch (e) {}
+      };
+      // Which "Sign up" link was used: data-cta="..." when set, otherwise nav or the page path.
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest && e.target.closest('a[href="/register"], a[href="register"]');
+        if (a) adhdTrack('signup_cta_click', { location: a.getAttribute('data-cta') || (a.closest('nav') ? 'nav' : location.pathname) });
+      });
+      <?php foreach (adhd_take_events() as $ev): ?>
+      adhdTrack(<?php echo json_encode((string)$ev[0]); ?>, <?php echo json_encode((object)$ev[1], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>);
+      <?php endforeach; ?>
     </script>
 
     <!-- Inter is served from this site (assets/fonts, SIL OFL) — no request to Google Fonts. -->
     <link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/css/style.css?v=20261108b">
+    <link rel="stylesheet" href="/css/style.css?v=20261115a">
 
     <!-- PWA Meta Tags -->
     <link rel="manifest" href="/manifest.json">

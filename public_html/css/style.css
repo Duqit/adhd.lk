@@ -981,6 +981,24 @@ textarea, select {
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+/* ---------- Sign-up prompt (guests, after real progress) ---------- */
+.signup-prompt {
+  position: fixed; left: 50%; bottom: 84px; z-index: 1001;
+  width: min(420px, calc(100% - 32px));
+  padding: 1.1rem 1.2rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--bg-glass-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  opacity: 0; transform: translateX(-50%) translateY(12px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.signup-prompt.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.signup-prompt-title { font-weight: 700; color: var(--text-primary); margin-bottom: 0.35rem; }
+.signup-prompt-body { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.9rem; line-height: 1.5; }
+.signup-prompt-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+.signup-prompt-actions .btn { padding: 0.55rem 1rem; font-size: 0.9rem; }
+
 /* ---------- FAB ---------- */
 .fab-container {
   position: fixed;

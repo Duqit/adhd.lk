@@ -77,6 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['username'] = $user['username'];
             $_SESSION['role'] = $user['role'];
             $_SESSION['pw_fp'] = adhd_pw_fingerprint($user['password_hash']);
+            adhd_queue_event('login', ['method' => 'google']);
             $_SESSION['last_name'] = $payload['family_name'] ?? '';
             
             header("Location: dashboard");
@@ -111,6 +112,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['username'] = $username;
                 $_SESSION['role'] = 'user'; // default role
                 $_SESSION['pw_fp'] = adhd_pw_fingerprint($hashed_password);
+                adhd_queue_event('sign_up', ['method' => 'google']);
                 $_SESSION['last_name'] = $payload['family_name'] ?? '';
                 
                 header("Location: dashboard");

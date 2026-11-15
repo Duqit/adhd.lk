@@ -131,9 +131,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     document.addEventListener('pointerdown', resumeSavedOnGesture, { once: true });
 
-    volBrown.addEventListener('input', () => { setVolume(brownNoiseNode, volBrown); saveVols(); });
-    volRain.addEventListener('input', () => { setVolume(rainNode, volRain); saveVols(); });
-    volOcean.addEventListener('input', () => { setVolume(oceanNode, volOcean); saveVols(); });
+    // One usage event the first time each sound is turned up on this visit.
+    const soundOn = {};
+    function trackSound(name, slider) {
+        if (!soundOn[name] && parseFloat(slider.value) > 0) {
+            soundOn[name] = true;
+            if (window.adhdTrack) adhdTrack('ambient_sound_on', { sound: name });
+        }
+    }
+
+    volBrown.addEventListener('input', () => { setVolume(brownNoiseNode, volBrown); saveVols(); trackSound('brown_noise', volBrown); });
+    volRain.addEventListener('input', () => { setVolume(rainNode, volRain); saveVols(); trackSound('rain', volRain); });
+    volOcean.addEventListener('input', () => { setVolume(oceanNode, volOcean); saveVols(); trackSound('ocean', volOcean); });
 
     stopAllBtn.addEventListener('click', () => {
         volBrown.value = 0;

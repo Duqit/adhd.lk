@@ -16,15 +16,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (too_many_attempts($pdo, $username, 10, 15)) {
         $error = t('auth_err_throttled');
+        $reason = 'throttled';
     } elseif (empty($username) || empty($email) || empty($password)) {
         $error = t('reg_err_required');
+        $reason = 'missing_field';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = t('reg_err_email');
+        $reason = 'invalid_email';
     } elseif (strlen($password) < 8) {
         $error = t('reg_err_pw_short');
+        $reason = 'short_password';
     } elseif (empty($recaptcha_response) || !verify_recaptcha($recaptcha_response)) {
         record_attempt($pdo, $username);
         $error = t('auth_err_recaptcha');
+        $reason = 'recaptcha';
     } else {
         // Check if username or email already exists
         $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ? OR email = ?");
@@ -32,6 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($stmt->rowCount() > 0) {
             record_attempt($pdo, $username);
             $error = t('reg_err_exists');
+            $reason = 'already_exists';
         } else {
             // Insert new user
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -43,13 +49,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['username'] = $username;
                 $_SESSION['role'] = 'user';
                 $_SESSION['pw_fp'] = adhd_pw_fingerprint($hashed_password);
+                adhd_queue_event('sign_up', ['method' => 'password']);
                 header("Location: dashboard");
                 exit;
             } else {
                 $error = t('reg_err_generic');
+                $reason = 'server_error';
             }
         }
     }
+    // Why sign-ups fail (a category only, no personal data).
+    if ($error) adhd_queue_event('sign_up_error', ['reason' => $reason ?? 'unknown']);
 }
 ?>
 <?php
@@ -66,6 +76,7 @@ require_once "includes/header.php";
             <script src="https://accounts.google.com/gsi/client" async defer></script>
             <script>
             function handleGoogleLogin(response) {
+                if (window.adhdTrack) adhdTrack('sign_up_submit', { method: 'google' });
                 var form = document.createElement('form');
                 form.method = 'POST';
                 form.action = 'google_auth';
@@ -138,6 +149,7 @@ require_once "includes/header.php";
             var submitted = false;
             form.addEventListener('submit', function (e) {
                 if (submitted) return;
+                if (window.adhdTrack) adhdTrack('sign_up_submit', { method: 'password' });
                 e.preventDefault();
                 grecaptcha.ready(function () {
                     grecaptcha.execute('6LdNfi8tAAAAAMbitRZfprzCA9An1G8V7dR7JJBW', { action: 'register' })

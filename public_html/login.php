@@ -39,6 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['username'] = $user['username'];
             $_SESSION['role'] = $user['role'];
             $_SESSION['pw_fp'] = adhd_pw_fingerprint($user['password_hash']);
+            adhd_queue_event('login', ['method' => 'password']);
             clear_attempts($pdo, $username);
 
             header("Location: dashboard");
@@ -65,6 +66,7 @@ require_once "includes/header.php";
             <script src="https://accounts.google.com/gsi/client" async defer></script>
             <script>
             function handleGoogleLogin(response) {
+                if (window.adhdTrack) adhdTrack('login_submit', { method: 'google' });
                 var form = document.createElement('form');
                 form.method = 'POST';
                 form.action = 'google_auth';
@@ -132,6 +134,7 @@ require_once "includes/header.php";
             var submitted = false;
             form.addEventListener('submit', function (e) {
                 if (submitted) return;
+                if (window.adhdTrack) adhdTrack('login_submit', { method: 'password' });
                 e.preventDefault();
                 grecaptcha.ready(function () {
                     grecaptcha.execute('6LdNfi8tAAAAAMbitRZfprzCA9An1G8V7dR7JJBW', { action: 'login' })

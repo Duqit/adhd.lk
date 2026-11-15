@@ -164,6 +164,8 @@ require_once "includes/header.php";
                     entries.push({ prompt: dailyPrompt, text: text, date: today });
                     Store.set(K.journal, entries);
                     Store.addXP(15);
+                    if (window.adhdTrack) adhdTrack('journal_save'); // never the text
+                    if (entries.length >= 3 && Store.promptSignup) Store.promptSignup('journal', 900);
                     render();
                 });
 
