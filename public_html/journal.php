@@ -17,6 +17,7 @@ $journaled_today = false;
 
 if ($is_logged_in) {
     require_once 'db.php';
+    require_once __DIR__ . '/includes/xp.php';
     if ($_SERVER['REQUEST_METHOD'] === 'POST') csrf_check(); // every logged-in form carries a token
     $user_id = $_SESSION['user_id'];
     $today = date('Y-m-d');
@@ -24,23 +25,16 @@ if ($is_logged_in) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'save_journal') {
         $entry = trim((string)($_POST['entry_text'] ?? ''));
         if (!empty($entry)) {
+            // XP is a once-a-day reward: extra entries are welcome but do not pay again.
+            $stmt = $pdo->prepare("SELECT id FROM journal_entries WHERE user_id = ? AND DATE(created_at) = ?");
+            $stmt->execute([$user_id, $today]);
+            $already_journaled = (bool)$stmt->fetch();
+
             $stmt = $pdo->prepare("INSERT INTO journal_entries (user_id, prompt, entry_text) VALUES (?, ?, ?)");
             $stmt->execute([$user_id, $daily_prompt, $entry]);
 
-            // Award XP
-            $stmt = $pdo->prepare("SELECT xp, level FROM users WHERE id = ?");
-            $stmt->execute([$user_id]);
-            $user = $stmt->fetch();
-            if ($user) {
-                $new_xp = $user['xp'] + 15;
-                $level = $user['level'];
-                $xp_needed = $level * 100;
-                if ($new_xp >= $xp_needed) {
-                    $level++;
-                    $new_xp -= $xp_needed;
-                }
-                $stmt = $pdo->prepare("UPDATE users SET xp = ?, level = ? WHERE id = ?");
-                $stmt->execute([$new_xp, $level, $user_id]);
+            if (!$already_journaled) {
+                adhd_award_xp($pdo, $user_id, 15);
             }
         }
         header("Location: journal");
