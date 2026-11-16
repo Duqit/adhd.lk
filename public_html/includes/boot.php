@@ -15,19 +15,32 @@ if (!defined('ADHD_BOOT')) {
         || (($_SERVER['SERVER_PORT'] ?? '') == 443);
 
     // --- Session cookie hardening (must precede session_start) ---
+    // Stay signed in for 30 days (renewed on every visit, see db.php). The host keeps
+    // sessions in a shared folder that a root cron empties after 24 idle minutes, so
+    // if <site home>/sessions exists (outside public_html) sessions live there and
+    // PHP's own garbage collection removes them after 30 idle days.
+    if (!defined('ADHD_SESSION_TTL')) define('ADHD_SESSION_TTL', 30 * 86400);
     if (session_status() === PHP_SESSION_NONE) {
         ini_set('session.use_strict_mode', '1');
         ini_set('session.use_only_cookies', '1');
+        $adhd_sess_dir = dirname(__DIR__, 2) . '/sessions';
+        if (is_dir($adhd_sess_dir) && is_writable($adhd_sess_dir)) {
+            ini_set('session.save_path', $adhd_sess_dir);
+            ini_set('session.gc_maxlifetime', (string)ADHD_SESSION_TTL);
+            ini_set('session.gc_probability', '1');
+            ini_set('session.gc_divisor', '200');
+        }
+        unset($adhd_sess_dir);
         if (PHP_VERSION_ID >= 70300) {
             session_set_cookie_params([
-                'lifetime' => 0,
+                'lifetime' => ADHD_SESSION_TTL,
                 'path'     => '/',
                 'secure'   => $adhd_https,
                 'httponly' => true,
                 'samesite' => 'Lax',
             ]);
         } else {
-            session_set_cookie_params(0, '/; samesite=Lax', '', $adhd_https, true);
+            session_set_cookie_params(ADHD_SESSION_TTL, '/; samesite=Lax', '', $adhd_https, true);
         }
     }
 

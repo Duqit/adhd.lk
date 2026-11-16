@@ -48,6 +48,21 @@ if (session_status() === PHP_SESSION_ACTIVE && !empty($_SESSION['user_id'])) {
         exit;
     }
     unset($fp_stmt, $fp_hash);
+
+    // Sliding sign-in: push the cookie's expiry out again (at most once an hour),
+    // so anyone who uses the site at least once a month stays signed in.
+    if (!headers_sent() && (time() - (int)($_SESSION['cookie_renewed'] ?? 0)) > 3600) {
+        $_SESSION['cookie_renewed'] = time();
+        $p = session_get_cookie_params();
+        setcookie(session_name(), session_id(), [
+            'expires'  => time() + (defined('ADHD_SESSION_TTL') ? ADHD_SESSION_TTL : 2592000),
+            'path'     => $p['path'],
+            'domain'   => $p['domain'],
+            'secure'   => $p['secure'],
+            'httponly' => $p['httponly'],
+            'samesite' => $p['samesite'] ?: 'Lax',
+        ]);
+    }
 }
 
 function verify_recaptcha($token) {
